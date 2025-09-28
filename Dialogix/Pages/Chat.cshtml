@@ -1,0 +1,26 @@
+﻿@page
+@model Dialogix.Pages.ChatModel
+@{
+    ViewData["Title"] = "Chat";
+}
+
+<h2>Chat</h2>
+
+<form method="post">
+    <div>
+        <label for="message">Your message:</label>
+        <input type="text" id="message" name="Message" value="@Model.Message" />
+        <button type="submit">Send</button>
+    </div>
+</form>
+
+@if (Model.ChatHistory.Any())
+{
+    <h3>Chat History</h3>
+    <ul>
+        @foreach (var msg in Model.ChatHistory)
+        {
+            <li>@msg</li>
+        }
+    </ul>
+}

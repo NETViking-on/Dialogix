@@ -1,31 +1,71 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Dialogix.Models;
+using Dialogix.Services;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Dialogix.Pages
 {
+    [IgnoreAntiforgeryToken] 
     public class ChatModel : PageModel
     {
-        [BindProperty]
-        public string Message { get; set; } = string.Empty;
+        private readonly IChatRepository _chatRepository;
+        private readonly IBotService _botService;
 
-        public List<string> ChatHistory { get; private set; } = new();
+        public List<ChatMessage> Messages { get; set; } = new();
 
-        
-        private static readonly List<string> _messages = new();
-
-        public void OnGet()
+        public ChatModel(IChatRepository chatRepository, IBotService botService)
         {
-            ChatHistory = new List<string>(_messages);
+            _chatRepository = chatRepository;
+            _botService = botService;
         }
 
-        public IActionResult OnPost()
+        public async Task OnGetAsync()
         {
-            if (!string.IsNullOrWhiteSpace(Message))
+            Messages = (await _chatRepository.GetAllMessagesAsync()).ToList();
+        }
+
+        public async Task<IActionResult> OnPostSendMessageAsync([FromBody] ChatInputDto dto)
+        {
+            if (string.IsNullOrWhiteSpace(dto.Text))
+                return new JsonResult(new { response = "Введите сообщение" });
+
+           
+            var userMessage = new ChatMessage
             {
-                _messages.Add(Message);
+                User = "You",
+                Text = dto.Text,
+                CreatedAt = DateTime.UtcNow
+            };
+            await _chatRepository.AddMessageAsync(userMessage);
+
+           
+            string botReply;
+            try
+            {
+                botReply = await _botService.GetBotResponseAsync(dto.Text) ?? "Бот не ответил";
+            }
+            catch
+            {
+                botReply = "Ошибка в боте";
             }
 
-            return RedirectToPage(); 
+            var botMessage = new ChatMessage
+            {
+                User = "Bot",
+                Text = botReply,
+                CreatedAt = DateTime.UtcNow
+            };
+            await _chatRepository.AddMessageAsync(botMessage);
+
+            return new JsonResult(new { response = botReply });
         }
+    }
+
+    public class ChatInputDto
+    {
+        public string Text { get; set; } = string.Empty;
     }
 }

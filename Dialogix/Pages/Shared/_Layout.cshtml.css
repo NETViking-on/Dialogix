@@ -1,48 +1,112 @@
-﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+﻿html, body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 16px;
+    color: #111827;
+    background-color: #f9fafb;
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
 }
+
 
 a {
-  color: #0077cc;
+    color: #2563eb;
+    text-decoration: none;
+    transition: color 0.25s ease;
 }
+
+    a:hover {
+        color: #1d4ed8;
+        text-decoration: underline;
+    }
+
+    a.navbar-brand {
+        font-weight: 700;
+        font-size: 1.35rem;
+        letter-spacing: -0.02em;
+        color: #2563eb;
+        transition: color 0.3s ease;
+    }
+
+        a.navbar-brand:hover {
+            color: #1d4ed8;
+        }
+
+
+.navbar {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: box-shadow 0.3s ease;
+}
+
+    .navbar:hover {
+        box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    }
+
+.nav-link {
+    font-weight: 500;
+    color: #374151 !important;
+    transition: color 0.3s ease;
+}
+
+    .nav-link:hover {
+        color: #2563eb !important;
+    }
+
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+    color: #fff !important;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 10px rgba(37,99,235,0.25);
+}
+
 
 .btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    border: none;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(37,99,235,0.25);
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #1d4ed8, #1e40af);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(37,99,235,0.35);
+    }
+
 
 .border-top {
-  border-top: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e7eb !important;
 }
+
 .border-bottom {
-  border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e7eb !important;
 }
 
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
 }
 
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
-}
 
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px;
+    background: #ffffff;
+    border-top: 1px solid #e5e7eb;
+    padding: 1rem 0;
+    text-align: center;
+    font-size: 0.95rem;
+    color: #6b7280;
+    transition: background 0.3s ease;
 }
+
+    .footer a {
+        color: #2563eb;
+        transition: color 0.3s ease;
+    }
+
+        .footer a:hover {
+            color: #1d4ed8;
+        }

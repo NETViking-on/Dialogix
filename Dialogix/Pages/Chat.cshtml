@@ -1,0 +1,47 @@
+﻿@page
+@model Dialogix.Pages.ChatModel
+@{
+    ViewData["Title"] = "Chat";
+}
+
+<link rel="stylesheet" href="~/css/chat.css" />
+<script src="~/js/chat.js" defer></script>
+
+<div class="chat-page">
+    <header class="chat-header">
+        <h2>Dialogix AI Chat 🤖</h2>
+    </header>
+
+    <main class="chat-body" id="chatBody" aria-live="polite">
+        <ul class="messages" id="messagesList">
+            @if (Model.Messages == null || !Model.Messages.Any())
+            {
+                <li class="chat-empty">No messages yet. Say hi 👋</li>
+            }
+            else
+            {
+                @foreach (var msg in Model.Messages)
+                {
+                    <li class="message @(msg.User == "Bot" ? "bot" : "user")">
+                        <div class="bubble">
+                            <div class="meta">
+                                <span class="user">@msg.User</span>
+                                <span class="time">@msg.CreatedAt.ToLocalTime().ToString("HH:mm")</span>
+                            </div>
+                            <div class="text">@msg.Text</div>
+                        </div>
+                    </li>
+                }
+            }
+        </ul>
+    </main>
+
+    <form method="post" class="chat-form" onsubmit="return submitForm(this);">
+        <label class="visually-hidden" for="UserInput">Your message</label>
+        <input type="text" id="UserInput" name="UserInput" class="chat-input" autocomplete="off" placeholder="Type a message..." value="" />
+        <button type="submit" class="chat-send">Send</button>
+    </form>
+
+
+
+</div>

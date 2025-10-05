@@ -1,10 +1,41 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<link rel="stylesheet" href="~/css/index.css" />
+
+<div class="index-page container">
+    <section class="hero">
+        <h1 class="display-4">Welcome to <span class="brand">Dialogix</span></h1>
+        <p class="lead">
+            My experimental chatbot built with <strong>ASP.NET Core 8</strong> and Razor Pages.
+        </p>
+
+        <div class="actions">
+            <a class="btn btn-primary" asp-page="/Chat">Open Chat</a>
+            <a class="btn btn-secondary" href="https://learn.microsoft.com/aspnet/core" target="_blank">
+                Learn ASP.NET Core
+            </a>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="card">
+            <h2>🚀 Fast development</h2>
+            <p>Built with Razor Pages, Entity Framework Core, and PostgreSQL.</p>
+        </div>
+        <div class="card">
+            <h2>💬 Real-time chat</h2>
+            <p>Interact with a simple chatbot. (More logic coming soon!)</p>
+        </div>
+        <div class="card">
+            <h2>🧪 Testable</h2>
+            <p>Unit tests ensure stable development and easy refactoring.</p>
+        </div>
+    </section>
+
+ 
+
 </div>

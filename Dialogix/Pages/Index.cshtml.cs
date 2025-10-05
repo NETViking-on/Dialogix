@@ -1,11 +1,13 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 
 namespace Dialogix.Pages;
 
 public class IndexModel : PageModel
 {
     private readonly ILogger<IndexModel> _logger;
+
+    public string WelcomeMessage { get; private set; } = string.Empty;
 
     public IndexModel(ILogger<IndexModel> logger)
     {
@@ -14,6 +16,7 @@ public class IndexModel : PageModel
 
     public void OnGet()
     {
-
+        WelcomeMessage = "Welcome to Dialogix – your chatbot playground!";
+        _logger.LogInformation("Index page visited at {Time}", DateTime.UtcNow);
     }
 }

@@ -2,26 +2,25 @@
 using Dialogix.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using System.Net.Http.Headers;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
-// === СБОРКА ПРИЛОЖЕНИЯ ===
 var builder = WebApplication.CreateBuilder(args);
 
-// === КОНФИГУРАЦИЯ ===
+// Конфигурация
 var configuration = builder.Configuration;
 
-// === СЕРВИСЫ ===
+// Сервисы
 builder.Services.AddRazorPages(options =>
 {
-    // Защита страниц: только авторизованные могут зайти в чат
     options.Conventions.AuthorizePage("/Chat");
+    options.Conventions.AuthorizePage("/Profile");
     options.Conventions.AllowAnonymousToPage("/Index");
     options.Conventions.AllowAnonymousToPage("/Login");
     options.Conventions.AllowAnonymousToPage("/Register");
     options.Conventions.AllowAnonymousToPage("/Error");
 });
 
-// Сессии (для fallback, если не CookieAuth)
+// Сессии
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -30,19 +29,19 @@ builder.Services.AddSession(options =>
     options.Cookie.SameSite = SameSiteMode.Lax;
 });
 
-// Доступ к HttpContext (для User, Session и т.д.)
+// HttpContext
 builder.Services.AddHttpContextAccessor();
 
 // База данных
 builder.Services.AddDbContext<ChatDbContext>(options =>
     options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
-// Репозиторий
-builder.Services.AddScoped<IChatRepository, ChatRepository>();
+// Репозиторий - исправленные ссылки
+builder.Services.AddScoped<Dialogix.Data.IChatRepository, Dialogix.Data.ChatRepository>();
 
-// === АУТЕНТИФИКАЦИЯ (ОБЯЗАТЕЛЬНО!) ===
+// Аутентификация
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+    .AddCookie(options =>
     {
         options.LoginPath = "/Login";
         options.LogoutPath = "/Logout";
@@ -56,30 +55,24 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 builder.Services.AddAuthorization();
 
-// === HUGGING FACE API ===
+// Hugging Face API
 var apiKey = configuration["HuggingFace:ApiKey"];
 if (string.IsNullOrWhiteSpace(apiKey))
     throw new InvalidOperationException("HuggingFace:ApiKey is missing in appsettings.json!");
 
-// HttpClient с Bearer токеном
-builder.Services.AddHttpClient<HuggingFaceChatService>(client =>
-{
-    client.BaseAddress = new Uri("https://api-inference.huggingface.co/");
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
-    client.Timeout = TimeSpan.FromSeconds(60);
-});
-
 builder.Services.AddHttpClient<IBotService, BotService>(client =>
 {
     client.BaseAddress = new Uri("https://api-inference.huggingface.co/");
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
+    client.DefaultRequestHeaders.Authorization =
+        new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiKey);
     client.Timeout = TimeSpan.FromSeconds(60);
 });
 
-// === ЛОГИРОВАНИЕ ===
+// Логирование
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
+
 if (builder.Environment.IsDevelopment())
 {
     builder.Logging.SetMinimumLevel(LogLevel.Debug);
@@ -89,10 +82,9 @@ else
     builder.Logging.SetMinimumLevel(LogLevel.Information);
 }
 
-// === СБОРКА ПРИЛОЖЕНИЯ ===
 var app = builder.Build();
 
-// === MIDDLEWARE (ВАЖЕН ПОРЯДОК!) ===
+// Middleware pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
@@ -101,24 +93,17 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
-// Сессия — ДО авторизации
 app.UseSession();
-
-// Аутентификация и авторизация
-app.UseAuthentication();  // ← ОБЯЗАТЕЛЬНО ДО UseAuthorization
+app.UseAuthentication();
 app.UseAuthorization();
-
-// === ЗАПУСК ===
 app.MapRazorPages();
 
-// Инициализация БД (один раз)
+// Инициализация БД
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ChatDbContext>();
-    db.Database.Migrate(); // Автоматическая миграция
+    await db.Database.MigrateAsync();
 }
 
 app.Run();

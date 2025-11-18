@@ -42,25 +42,25 @@
                         <!-- USER INFO PANEL (KZ) -->
                         <div class="user-info-panel">
                             <div class="info-item">
-                                <span class="icon">Clock</span>
+                                <span class="icon">🕒</span>
                                 <span class="value">@currentTime</span>
                             </div>
                             <div class="info-item">
-                                <span class="icon">Kazakhstan Flag</span>
-                                <span class="value">KZ</span>
+                                <span class="icon">🇰🇿</span>
+                                <span class="value">Kazakhstan</span>
                             </div>
                         </div>
 
                         <!-- КНОПКИ ДЕЙСТВИЙ -->
                         <div class="action-buttons">
                             <a class="btn btn-primary btn-chat" href="/Chat">
-                                <span class="icon">Chat</span> Chat
+                                <span class="icon">💬</span> Chat
                             </a>
 
                             <!-- КНОПКА ВЫХОДА (ФОРМА!) -->
                             <form method="post" asp-page="/Logout" class="logout-form" title="Logout">
                                 <button type="submit" class="btn btn-logout">
-                                    <span class="icon">Exit</span>
+                                    <span class="icon">🚪</span> Logout
                                 </button>
                             </form>
                         </div>
@@ -71,13 +71,13 @@
                     <!-- НЕ АВТОРИЗОВАН -->
                     <div class="auth-buttons">
                         <a class="btn btn-primary btn-glow" href="/Chat">
-                            <span class="icon">Chat</span> Open Chat
+                            <span class="icon">💬</span> Open Chat
                         </a>
                         <a class="btn btn-secondary btn-pulse" href="/Login">
-                            <span class="icon">Lock</span> Login
+                            <span class="icon">🔐</span> Login
                         </a>
                         <a class="btn btn-outline btn-neon" href="/Register">
-                            <span class="icon">Sparkles</span> Register
+                            <span class="icon">✨</span> Register
                         </a>
                     </div>
                 }
@@ -88,25 +88,21 @@
     <!-- FEATURES -->
     <section class="features">
         <div class="card animate-card" style="animation-delay: 0.1s">
-            <div class="card-icon">Rocket</div>
+            <div class="card-icon">🚀</div>
             <h2>Fast Development</h2>
             <p>Powered by Razor Pages, EF Core, and PostgreSQL.</p>
         </div>
         <div class="card animate-card" style="animation-delay: 0.2s">
-            <div class="card-icon">Lightning</div>
+            <div class="card-icon">⚡</div>
             <h2>Real-time AI</h2>
             <p>Chat with Hugging Face models instantly.</p>
         </div>
         <div class="card animate-card" style="animation-delay: 0.3s">
-            <div class="card-icon">Shield</div>
+            <div class="card-icon">🛡️</div>
             <h2>Secure & Scalable</h2>
             <p>Cookie Auth, PostgreSQL, modular design.</p>
         </div>
     </section>
-
-    <footer class="footer">
-        <p>© 2025 <strong>Dialogix</strong> — AI Playground for the Future</p>
-    </footer>
 </div>
 
 @functions {

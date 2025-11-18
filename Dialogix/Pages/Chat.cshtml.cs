@@ -13,12 +13,12 @@ namespace Dialogix.Pages
     [IgnoreAntiforgeryToken] // Для AJAX
     public class ChatModel : PageModel
     {
-        private readonly IChatRepository _chatRepository;
+        private readonly Data.IChatRepository _chatRepository;
         private readonly IBotService _botService;
 
         public List<ChatMessage> Messages { get; set; } = new();
 
-        public ChatModel(IChatRepository chatRepository, IBotService botService)
+        public ChatModel(Data.IChatRepository chatRepository, IBotService botService)
         {
             _chatRepository = chatRepository;
             _botService = botService;
@@ -26,7 +26,7 @@ namespace Dialogix.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
-            // Проверка на случай, если кто-то обошёл [Authorize]
+           
             if (!User.Identity?.IsAuthenticated ?? false)
             {
                 return RedirectToPage("/Login", new { returnUrl = "/Chat" });

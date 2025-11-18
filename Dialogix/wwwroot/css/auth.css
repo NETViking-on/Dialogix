@@ -2,83 +2,213 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background: radial-gradient(circle at 30% 30%, #0f0f1a, #000);
-    font-family: 'Orbitron', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    padding: 2rem 1rem;
+    position: relative;
+    overflow: hidden;
 }
+
+    .auth-page::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at 20% 80%, rgba(124, 58, 237, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+        pointer-events: none;
+    }
 
 .auth-card {
-    background: rgba(15, 15, 30, 0.9);
-    border: 2px solid rgba(0,255,255,0.3);
-    box-shadow: 0 0 20px rgba(0,255,255,0.2);
-    border-radius: 12px;
-    padding: 32px;
-    width: 360px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 3rem 2.5rem;
+    width: 100%;
+    max-width: 420px;
     text-align: center;
-    color: #e0e0e0;
+    color: #e0e7ff;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(124, 58, 237, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    z-index: 1;
+    animation: cardSlideUp 0.6s ease-out;
 }
 
+    .auth-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(59, 130, 246, 0.05));
+        border-radius: 20px;
+        pointer-events: none;
+        z-index: -1;
+    }
+
     .auth-card h2 {
-        margin-bottom: 20px;
-        text-shadow: 0 0 8px cyan;
+        margin-bottom: 2rem;
+        font-size: 2rem;
+        font-weight: 700;
+        background: linear-gradient(90deg, #7c3aed, #3b82f6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
     }
 
 .form-group {
-    margin-bottom: 16px;
+    margin-bottom: 1.5rem;
     text-align: left;
 }
 
     .form-group label {
         display: block;
         font-size: 0.9rem;
-        color: #ccc;
-        margin-bottom: 4px;
+        font-weight: 500;
+        color: #c4b5fd;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
     .form-group input {
         width: 100%;
-        padding: 10px;
-        background: transparent;
-        border: 1px solid #00ffff77;
-        color: #00ffff;
-        border-radius: 8px;
+        padding: 1rem 1.25rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #e0e7ff;
+        border-radius: 12px;
         outline: none;
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+        backdrop-filter: blur(10px);
     }
 
+        .form-group input::placeholder {
+            color: #94a3b8;
+            opacity: 0.7;
+        }
+
         .form-group input:focus {
-            box-shadow: 0 0 8px #00ffffaa;
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.25), 0 8px 20px rgba(124, 58, 237, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
         }
 
 .btn {
-    background: linear-gradient(90deg, #00ffff55, #ff00ff55);
-    border: 1px solid #00ffff77;
+    background: linear-gradient(45deg, #7c3aed, #3b82f6);
+    border: none;
     color: white;
-    padding: 10px 16px;
-    border-radius: 8px;
+    padding: 1rem 2rem;
+    border-radius: 12px;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 600;
+    font-size: 1rem;
     width: 100%;
-    margin-top: 8px;
-    transition: all 0.2s ease;
+    margin-top: 1rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
 }
 
+    .btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, #6d28d9, #2563eb);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 1;
+    }
+
     .btn:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0 12px #ff00ff;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(124, 58, 237, 0.6), 0 0 30px rgba(124, 58, 237, 0.3);
+    }
+
+        .btn:hover::before {
+            opacity: 1;
+        }
+
+    .btn span {
+        position: relative;
+        z-index: 2;
     }
 
 .switch-link {
-    margin-top: 16px;
-    font-size: 0.9rem;
+    margin-top: 2rem;
+    font-size: 0.95rem;
+    color: #94a3b8;
 }
 
     .switch-link a {
-        color: #00ffff;
+        color: #c4b5fd;
         text-decoration: none;
-        transition: color 0.2s ease;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        position: relative;
     }
 
-        .switch-link a:hover {
-            color: #ff00ff;
+        .switch-link a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #7c3aed, #3b82f6);
+            transition: width 0.3s ease;
         }
+
+        .switch-link a:hover {
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(196, 181, 253, 0.5);
+        }
+
+            .switch-link a:hover::after {
+                width: 100%;
+            }
+
+/* Анимации */
+@keyframes cardSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Дополнительные эффекты */
+.auth-card:hover {
+    box-shadow: 0 12px 40px rgba(124, 58, 237, 0.3), 0 0 0 1px rgba(124, 58, 237, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+    .auth-card {
+        padding: 2rem 1.5rem;
+        margin: 1rem;
+    }
+
+        .auth-card h2 {
+            font-size: 1.75rem;
+        }
+
+    .form-group input {
+        padding: 0.875rem 1rem;
+    }
+}

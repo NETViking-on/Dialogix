@@ -1,59 +1,117 @@
-
-.privacy-page {
+﻿.privacy-page {
     margin-top: 3rem;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    color: #111827;
+    color: #e0e7ff;
     animation: fadeIn 0.6s ease-out;
+    padding: 2rem 1rem;
 }
 
-    
     .privacy-page h1 {
-        font-size: 2.25rem;
+        font-size: 2.5rem;
         font-weight: 800;
         text-align: center;
-        color: #2563eb;
+        background: linear-gradient(90deg, #7c3aed, #3b82f6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
         margin-bottom: 2rem;
         position: relative;
         animation: fadeInDown 0.8s ease-out;
+        text-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
     }
 
         .privacy-page h1::after {
             content: "";
             display: block;
-            width: 80px;
+            width: 100px;
             height: 4px;
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            margin: 0.75rem auto 0;
+            background: linear-gradient(135deg, #7c3aed, #3b82f6);
+            margin: 1rem auto 0;
             border-radius: 9999px;
+            box-shadow: 0 0 10px rgba(124, 58, 237, 0.5);
         }
 
-
 .privacy-container {
-    background: #fff;
-    border-radius: 1.25rem;
-    padding: 2.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 3rem;
     max-width: 800px;
     margin: 0 auto;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(124, 58, 237, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     animation: fadeInUp 0.9s ease-out;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.3s ease;
+    position: relative;
 }
 
-    .privacy-container:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+    .privacy-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(59, 130, 246, 0.05));
+        border-radius: 20px;
+        pointer-events: none;
+        z-index: -1;
     }
 
-   
+    .privacy-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 40px rgba(124, 58, 237, 0.3), 0 0 0 1px rgba(124, 58, 237, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        border-color: rgba(124, 58, 237, 0.3);
+    }
+
     .privacy-container p {
-        font-size: 1.05rem;
-        color: #4b5563;
+        font-size: 1.1rem;
+        color: #c4b5fd;
         line-height: 1.7;
-        margin-bottom: 1.25rem;
+        margin-bottom: 1.5rem;
         animation: fadeIn 1s ease-out;
     }
 
+    .privacy-container h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #e0e7ff;
+        margin: 2rem 0 1rem 0;
+        background: linear-gradient(90deg, #c4b5fd, #a5b4fc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
 
+    .privacy-container ul {
+        color: #94a3b8;
+        margin-bottom: 1.5rem;
+        padding-left: 1.5rem;
+    }
+
+    .privacy-container li {
+        margin-bottom: 0.5rem;
+        line-height: 1.6;
+    }
+
+    .privacy-container strong {
+        color: #e0e7ff;
+        font-weight: 600;
+    }
+
+    .privacy-container a {
+        color: #c4b5fd;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+        .privacy-container a:hover {
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(196, 181, 253, 0.5);
+        }
+
+/* Анимации */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -89,3 +147,82 @@
         transform: translateY(0);
     }
 }
+
+/* Дополнительные стили для контента */
+.privacy-section {
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+    .privacy-section:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+
+.privacy-highlight {
+    background: rgba(124, 58, 237, 0.1);
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    position: relative;
+}
+
+    .privacy-highlight::before {
+        content: '💡';
+        position: absolute;
+        top: -10px;
+        left: 20px;
+        background: linear-gradient(135deg, #7c3aed, #3b82f6);
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+    }
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .privacy-page {
+        margin-top: 1rem;
+        padding: 1rem;
+    }
+
+        .privacy-page h1 {
+            font-size: 2rem;
+        }
+
+    .privacy-container {
+        padding: 2rem 1.5rem;
+    }
+
+        .privacy-container p {
+            font-size: 1rem;
+        }
+}
+
+/* Эффект свечения для важных элементов */
+.privacy-important {
+    position: relative;
+}
+
+    .privacy-important::after {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(45deg, #7c3aed, #3b82f6, #7c3aed);
+        border-radius: 12px;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .privacy-important:hover::after {
+        opacity: 0.1;
+    }

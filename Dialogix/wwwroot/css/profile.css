@@ -1,0 +1,519 @@
+﻿.profile-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    color: #e0e7ff;
+    padding: 2rem 1rem;
+}
+
+.profile-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Заголовок профиля */
+.profile-header {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+}
+
+.avatar-section {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.avatar-large {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7c3aed, #3b82f6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+    box-shadow: 0 8px 25px rgba(124, 58, 237, 0.4);
+}
+
+.user-basic-info h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    background: linear-gradient(90deg, #e0e7ff, #c4b5fd);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.user-email {
+    color: #94a3b8;
+    margin: 0 0 0.25rem 0;
+}
+
+.member-since {
+    color: #64748b;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Контент профиля */
+.profile-content {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 2rem;
+}
+
+@media (max-width: 1024px) {
+    .profile-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Карточки */
+.profile-card,
+.stats-card,
+.analytics-card,
+.achievements-card,
+.activity-card,
+.hourly-card,
+.recent-activity-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.profile-card:hover,
+.stats-card:hover,
+.analytics-card:hover,
+.achievements-card:hover,
+.activity-card:hover,
+.hourly-card:hover,
+.recent-activity-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(124, 58, 237, 0.2);
+    border-color: rgba(124, 58, 237, 0.3);
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 1.5rem 0;
+    color: #e0e7ff;
+}
+
+/* Формы */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    color: #c4b5fd;
+    margin-bottom: 0.5rem;
+}
+
+.form-input,
+.form-textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: #e0e7ff;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: #7c3aed;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.25);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* Статистика */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #7c3aed;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+
+/* Аналитика */
+.analytics-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.analytic-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.analytic-item:last-child {
+    border-bottom: none;
+}
+
+.analytic-item .label {
+    color: #c4b5fd;
+    font-weight: 500;
+}
+
+.analytic-item .value {
+    color: #e0e7ff;
+    font-weight: 600;
+}
+
+/* Достижения */
+.achievements-card .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.progress-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: conic-gradient(#7c3aed @Model.AchievementProgress%, #374151 0%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.progress-circle::before {
+    content: '';
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+}
+
+.progress-text {
+    position: relative;
+    z-index: 1;
+    font-weight: 600;
+    color: #e0e7ff;
+}
+
+.achievements-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.achievement-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.achievement-item.unlocked {
+    border-color: rgba(124, 58, 237, 0.3);
+    background: rgba(124, 58, 237, 0.1);
+}
+
+.achievement-item.locked {
+    opacity: 0.6;
+}
+
+.achievement-icon {
+    font-size: 1.5rem;
+}
+
+.achievement-info {
+    flex: 1;
+}
+
+.achievement-name {
+    font-weight: 600;
+    color: #e0e7ff;
+    margin-bottom: 0.25rem;
+}
+
+.achievement-desc {
+    font-size: 0.9rem;
+    color: #94a3b8;
+    margin-bottom: 0.5rem;
+}
+
+.achievement-progress {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #7c3aed, #3b82f6);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+/* Графики */
+.activity-chart {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 0.5rem;
+    height: 200px;
+}
+
+.chart-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.bar-value {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-bottom: 0.5rem;
+}
+
+.bar-container {
+    flex: 1;
+    width: 100%;
+    max-width: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px 4px 0 0;
+    display: flex;
+    align-items: end;
+}
+
+.bar-fill {
+    width: 100%;
+    background: linear-gradient(to top, #7c3aed, #3b82f6);
+    border-radius: 4px 4px 0 0;
+    transition: height 0.3s ease;
+}
+
+.bar-label {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-top: 0.5rem;
+}
+
+/* Почасовая активность */
+.hourly-chart {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.5rem;
+}
+
+.hour-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.hour-label {
+    font-size: 0.7rem;
+    color: #94a3b8;
+}
+
+.hour-bar-container {
+    width: 100%;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    display: flex;
+    align-items: end;
+}
+
+.hour-bar {
+    width: 100%;
+    background: linear-gradient(to top, #7c3aed, #3b82f6);
+    border-radius: 4px;
+    transition: height 0.3s ease;
+}
+
+.hour-value {
+    font-size: 0.7rem;
+    color: #94a3b8;
+}
+
+/* Недавние сообщения */
+.messages-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.message-item {
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.message-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.message-time {
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
+
+.message-text {
+    color: #e0e7ff;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+/* Кнопки */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #7c3aed, #3b82f6);
+    color: white;
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(124, 58, 237, 0.6);
+}
+
+.btn-export {
+    background: rgba(255, 255, 255, 0.1);
+    color: #e0e7ff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-export:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Уведомления */
+.alert {
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+
+.alert-success {
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    color: #4ade80;
+}
+
+.alert-error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
+}
+
+/* Валидация */
+.validation-error {
+    color: #fca5a5;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+/* Пустые состояния */
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: #94a3b8;
+}
+
+/* Анимации */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.profile-card,
+.stats-card,
+.analytics-card,
+.achievements-card,
+.activity-card,
+.hourly-card,
+.recent-activity-card {
+    animation: fadeIn 0.6s ease-out;
+}

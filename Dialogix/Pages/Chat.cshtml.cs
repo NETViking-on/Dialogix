@@ -1,14 +1,16 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Dialogix.Models;
 using Dialogix.Services;
+using Microsoft.AspNetCore.Authorization; // ← Добавь!
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Dialogix.Pages
 {
-    [IgnoreAntiforgeryToken] 
+    [Authorize] // ← ТОЛЬКО АВТОРИЗОВАННЫЕ!
+    [IgnoreAntiforgeryToken] // Для AJAX
     public class ChatModel : PageModel
     {
         private readonly IChatRepository _chatRepository;
@@ -22,34 +24,42 @@ namespace Dialogix.Pages
             _botService = botService;
         }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
+            // Проверка на случай, если кто-то обошёл [Authorize]
+            if (!User.Identity?.IsAuthenticated ?? false)
+            {
+                return RedirectToPage("/Login", new { returnUrl = "/Chat" });
+            }
+
             Messages = (await _chatRepository.GetAllMessagesAsync()).ToList();
+            return Page();
         }
 
         public async Task<IActionResult> OnPostSendMessageAsync([FromBody] ChatInputDto dto)
         {
-            if (string.IsNullOrWhiteSpace(dto.Text))
-                return new JsonResult(new { response = "������� ���������" });
+            if (!User.Identity?.IsAuthenticated ?? false)
+                return Unauthorized();
 
-           
+            if (string.IsNullOrWhiteSpace(dto.Text))
+                return new JsonResult(new { response = "Введите сообщение" });
+
             var userMessage = new ChatMessage
             {
-                User = "You",
+                User = User.Identity?.Name ?? "You",
                 Text = dto.Text,
                 CreatedAt = DateTime.UtcNow
             };
             await _chatRepository.AddMessageAsync(userMessage);
 
-           
             string botReply;
             try
             {
-                botReply = await _botService.GetBotResponseAsync(dto.Text) ?? "��� �� �������";
+                botReply = await _botService.GetBotResponseAsync(dto.Text) ?? "Бот не ответил";
             }
             catch
             {
-                botReply = "������ � ����";
+                botReply = "Ошибка в боте";
             }
 
             var botMessage = new ChatMessage

@@ -1,0 +1,30 @@
+﻿@page
+@model Dialogix.Pages.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<link rel="stylesheet" href="~/css/auth.css" />
+
+<div class="auth-page">
+    <div class="auth-card">
+        <h2>🔐 Login</h2>
+        <form method="post">
+            <div class="form-group">
+                <label for="Email">Email</label>
+                <input type="email" id="Email" name="Email" required />
+            </div>
+
+            <div class="form-group">
+                <label for="Password">Password</label>
+                <input type="password" id="Password" name="Password" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Login</button>
+
+            <p class="switch-link">
+                Don’t have an account? <a href="/Register">Register</a>
+            </p>
+        </form>
+    </div>
+</div>

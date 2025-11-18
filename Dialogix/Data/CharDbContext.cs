@@ -11,6 +11,7 @@ namespace Dialogix.Data
         }
 
         public DbSet<ChatMessage> ChatMessages { get; set; }
+        public DbSet<User> Users { get; set; } 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -18,7 +19,7 @@ namespace Dialogix.Data
 
             modelBuilder.Entity<ChatMessage>(entity =>
             {
-                entity.HasKey(e => e.Id); 
+                entity.HasKey(e => e.Id);
                 entity.Property(e => e.User)
                       .IsRequired()
                       .HasMaxLength(50);
@@ -27,6 +28,16 @@ namespace Dialogix.Data
                       .HasMaxLength(2000);
                 entity.Property(e => e.CreatedAt)
                       .IsRequired();
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasKey(u => u.Id);
+                entity.HasIndex(u => u.Email).IsUnique();
+                entity.Property(u => u.Username).IsRequired().HasMaxLength(100);
+                entity.Property(u => u.Email).IsRequired().HasMaxLength(100);
+                entity.Property(u => u.PasswordHash).IsRequired();
+                entity.Property(u => u.CreatedAt).HasDefaultValueSql("NOW()");
             });
         }
     }

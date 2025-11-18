@@ -1,41 +1,121 @@
 ﻿@page
-@model IndexModel
+@model Dialogix.Pages.IndexModel
 @{
     ViewData["Title"] = "Home";
-}
 
+    // === KZ TIME & INFO ===
+    var kzTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow,
+        TimeZoneInfo.FindSystemTimeZoneById("Central Asia Standard Time"));
+    var currentTime = kzTime.ToString("MMMM d, yyyy h:mm tt") + " +05";
+}
 <link rel="stylesheet" href="~/css/index.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <div class="index-page container">
+    <!-- HERO SECTION -->
     <section class="hero">
-        <h1 class="display-4">Welcome to <span class="brand">Dialogix</span></h1>
-        <p class="lead">
-            My experimental chatbot built with <strong>ASP.NET Core 8</strong> and Razor Pages.
-        </p>
+        <div class="hero-content">
+            <h1 class="display-4 animate-fade">
+                Welcome to <span class="brand">Dialogix</span>
+            </h1>
+            <p class="lead animate-slide-up">
+                Your intelligent assistant built with <strong>ASP.NET Core 8</strong> and Razor Pages.
+            </p>
 
-        <div class="actions">
-            <a class="btn btn-primary" asp-page="/Chat">Open Chat</a>
-            <a class="btn btn-secondary" href="https://learn.microsoft.com/aspnet/core" target="_blank">
-                Learn ASP.NET Core
-            </a>
+            <!-- АВТОРИЗАЦИЯ / ПРОФИЛЬ -->
+            <div class="auth-container animate-slide-up" style="animation-delay: 0.2s">
+                @if (Model.IsLoggedIn)
+                {
+                    <!-- АВТОРИЗОВАННЫЙ ПОЛЬЗОВАТЕЛЬ -->
+                    <div class="user-profile-card">
+                        <!-- АВАТАР + ПРОФИЛЬ -->
+                        <a href="/Profile" class="profile-link" title="View Profile">
+                            <div class="avatar-circle">
+                                <span class="avatar-initials">@GetInitials(Model.Username)</span>
+                            </div>
+                            <div class="user-info">
+                                <p class="greeting">Hey, <strong>@Model.Username</strong>!</p>
+                                <p class="profile-hint">Click to view profile</p>
+                            </div>
+                        </a>
+
+                        <!-- USER INFO PANEL (KZ) -->
+                        <div class="user-info-panel">
+                            <div class="info-item">
+                                <span class="icon">Clock</span>
+                                <span class="value">@currentTime</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="icon">Kazakhstan Flag</span>
+                                <span class="value">KZ</span>
+                            </div>
+                        </div>
+
+                        <!-- КНОПКИ ДЕЙСТВИЙ -->
+                        <div class="action-buttons">
+                            <a class="btn btn-primary btn-chat" href="/Chat">
+                                <span class="icon">Chat</span> Chat
+                            </a>
+
+                            <!-- КНОПКА ВЫХОДА (ФОРМА!) -->
+                            <form method="post" asp-page="/Logout" class="logout-form" title="Logout">
+                                <button type="submit" class="btn btn-logout">
+                                    <span class="icon">Exit</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <!-- НЕ АВТОРИЗОВАН -->
+                    <div class="auth-buttons">
+                        <a class="btn btn-primary btn-glow" href="/Chat">
+                            <span class="icon">Chat</span> Open Chat
+                        </a>
+                        <a class="btn btn-secondary btn-pulse" href="/Login">
+                            <span class="icon">Lock</span> Login
+                        </a>
+                        <a class="btn btn-outline btn-neon" href="/Register">
+                            <span class="icon">Sparkles</span> Register
+                        </a>
+                    </div>
+                }
+            </div>
         </div>
     </section>
 
+    <!-- FEATURES -->
     <section class="features">
-        <div class="card">
-            <h2>🚀 Fast development</h2>
-            <p>Built with Razor Pages, Entity Framework Core, and PostgreSQL.</p>
+        <div class="card animate-card" style="animation-delay: 0.1s">
+            <div class="card-icon">Rocket</div>
+            <h2>Fast Development</h2>
+            <p>Powered by Razor Pages, EF Core, and PostgreSQL.</p>
         </div>
-        <div class="card">
-            <h2>💬 Real-time chat</h2>
-            <p>Interact with a simple chatbot. (More logic coming soon!)</p>
+        <div class="card animate-card" style="animation-delay: 0.2s">
+            <div class="card-icon">Lightning</div>
+            <h2>Real-time AI</h2>
+            <p>Chat with Hugging Face models instantly.</p>
         </div>
-        <div class="card">
-            <h2>🧪 Testable</h2>
-            <p>Unit tests ensure stable development and easy refactoring.</p>
+        <div class="card animate-card" style="animation-delay: 0.3s">
+            <div class="card-icon">Shield</div>
+            <h2>Secure & Scalable</h2>
+            <p>Cookie Auth, PostgreSQL, modular design.</p>
         </div>
     </section>
 
- 
-
+    <footer class="footer">
+        <p>© 2025 <strong>Dialogix</strong> — AI Playground for the Future</p>
+    </footer>
 </div>
+
+@functions {
+    private string GetInitials(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name)) return "??";
+        var parts = name.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        return parts.Length >= 2
+            ? $"{char.ToUpper(parts[0][0])}{char.ToUpper(parts[1][0])}"
+            : $"{char.ToUpper(name[0])}";
+    }
+}

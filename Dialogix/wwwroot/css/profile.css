@@ -10,7 +10,7 @@
     margin: 0 auto;
 }
 
-/* Заголовок профиля */
+
 .profile-header {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(20px);
@@ -69,7 +69,7 @@
     font-size: 0.9rem;
 }
 
-/* Контент профиля */
+
 .profile-content {
     display: grid;
     grid-template-columns: 1fr 1.2fr;
@@ -82,7 +82,7 @@
     }
 }
 
-/* Карточки */
+
 .profile-card,
 .stats-card,
 .analytics-card,
@@ -119,7 +119,7 @@
     color: #e0e7ff;
 }
 
-/* Формы */
+
 .form-group {
     margin-bottom: 1.5rem;
 }
@@ -151,7 +151,7 @@
     background: rgba(255, 255, 255, 0.08);
 }
 
-/* Статистика */
+
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -178,7 +178,7 @@
     color: #94a3b8;
 }
 
-/* Аналитика */
+
 .analytics-list {
     display: flex;
     flex-direction: column;
@@ -207,7 +207,7 @@
     font-weight: 600;
 }
 
-/* Достижения */
+
 .achievements-card .card-header {
     display: flex;
     justify-content: space-between;
@@ -353,7 +353,7 @@
     margin-top: 0.5rem;
 }
 
-/* Почасовая активность */
+
 .hourly-chart {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
@@ -393,7 +393,7 @@
     color: #94a3b8;
 }
 
-/* Недавние сообщения */
+
 .messages-list {
     max-height: 300px;
     overflow-y: auto;
@@ -425,7 +425,7 @@
     word-break: break-word;
 }
 
-/* Кнопки */
+
 .btn {
     display: inline-flex;
     align-items: center;
@@ -461,7 +461,7 @@
     transform: translateY(-2px);
 }
 
-/* Уведомления */
+
 .alert {
     padding: 1rem 1.5rem;
     border-radius: 8px;
@@ -481,7 +481,7 @@
     color: #fca5a5;
 }
 
-/* Валидация */
+
 .validation-error {
     color: #fca5a5;
     font-size: 0.875rem;
@@ -489,14 +489,14 @@
     display: block;
 }
 
-/* Пустые состояния */
+
 .empty-state {
     text-align: center;
     padding: 2rem;
     color: #94a3b8;
 }
 
-/* Анимации */
+
 @keyframes fadeIn {
     from {
         opacity: 0;

@@ -98,7 +98,7 @@
     font-size: 0.85rem;
 }
 
-/* Адаптивность */
+
 @media (max-width: 768px) {
     .footer-contents {
         flex-direction: column;

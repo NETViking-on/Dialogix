@@ -3,43 +3,70 @@
 @{
     ViewData["Title"] = "Home";
 
-    // === KZ TIME & INFO ===
     var kzTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow,
         TimeZoneInfo.FindSystemTimeZoneById("Central Asia Standard Time"));
     var currentTime = kzTime.ToString("MMMM d, yyyy h:mm tt") + " +05";
+
+   
+    var currentCulture = Model.CurrentCulture;
+    var username = Model.Username;
+    var isLoggedIn = Model.IsLoggedIn;
 }
+
 <link rel="stylesheet" href="~/css/index.css" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <div class="index-page container">
-    <!-- HERO SECTION -->
+
+  
+    <div class="language-switcher">
+        <form method="post" asp-page-handler="SetLanguage">
+            <input type="hidden" name="returnUrl" value="@Url.Page("./Index")" />
+            <div class="lang-buttons">
+                <button type="submit" name="culture" value="en" class="lang-btn @(currentCulture == "en" ? "active" : "")">
+                    <span class="flag">🇺🇸</span>
+                    <span>English</span>
+                </button>
+                <button type="submit" name="culture" value="ru" class="lang-btn @(currentCulture == "ru" ? "active" : "")">
+                    <span class="flag">🇷🇺</span>
+                    <span>Русский</span>
+                </button>
+                <button type="submit" name="culture" value="kk" class="lang-btn @(currentCulture == "kk" ? "active" : "")">
+                    <span class="flag">🇰🇿</span>
+                    <span>Қазақша</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+   
     <section class="hero">
         <div class="hero-content">
             <h1 class="display-4 animate-fade">
-                Welcome to <span class="brand">Dialogix</span>
+                @GetWelcomeText(currentCulture) <span class="brand">ARSU AI MANAGER</span>
             </h1>
             <p class="lead animate-slide-up">
-                Your intelligent assistant built with <strong>ASP.NET Core 8</strong> and Razor Pages.
+                @Html.Raw(GetDescriptionText(currentCulture))
             </p>
 
-            <!-- АВТОРИЗАЦИЯ / ПРОФИЛЬ -->
+          
             <div class="auth-container animate-slide-up" style="animation-delay: 0.2s">
-                @if (Model.IsLoggedIn)
+                @if (isLoggedIn)
                 {
-                    <!-- АВТОРИЗОВАННЫЙ ПОЛЬЗОВАТЕЛЬ -->
+                    
                     <div class="user-profile-card">
-                        <!-- АВАТАР + ПРОФИЛЬ -->
-                        <a href="/Profile" class="profile-link" title="View Profile">
+                       
+                        <a href="/Profile" class="profile-link" title="@GetViewProfileText(currentCulture)">
                             <div class="avatar-circle">
-                                <span class="avatar-initials">@GetInitials(Model.Username)</span>
+                                <span class="avatar-initials">@GetInitials(username)</span>
                             </div>
                             <div class="user-info">
-                                <p class="greeting">Hey, <strong>@Model.Username</strong>!</p>
-                                <p class="profile-hint">Click to view profile</p>
+                                <p class="greeting">@GetGreetingText(currentCulture), <strong>@username</strong>!</p>
+                                <p class="profile-hint">@GetClickProfileText(currentCulture)</p>
                             </div>
                         </a>
 
-                        <!-- USER INFO PANEL (KZ) -->
+                       
                         <div class="user-info-panel">
                             <div class="info-item">
                                 <span class="icon">🕒</span>
@@ -47,20 +74,19 @@
                             </div>
                             <div class="info-item">
                                 <span class="icon">🇰🇿</span>
-                                <span class="value">Kazakhstan</span>
+                                <span class="value">@GetKazakhstanText(currentCulture)</span>
                             </div>
                         </div>
 
-                        <!-- КНОПКИ ДЕЙСТВИЙ -->
+                        
                         <div class="action-buttons">
                             <a class="btn btn-primary btn-chat" href="/Chat">
-                                <span class="icon">💬</span> Chat
+                                <span class="icon">💬</span> @GetChatText(currentCulture)
                             </a>
 
-                            <!-- КНОПКА ВЫХОДА (ФОРМА!) -->
-                            <form method="post" asp-page="/Logout" class="logout-form" title="Logout">
+                            <form method="post" asp-page="/Logout" class="logout-form" title="@GetLogoutText(currentCulture)">
                                 <button type="submit" class="btn btn-logout">
-                                    <span class="icon">🚪</span> Logout
+                                    <span class="icon">🚪</span> @GetLogoutText(currentCulture)
                                 </button>
                             </form>
                         </div>
@@ -68,16 +94,16 @@
                 }
                 else
                 {
-                    <!-- НЕ АВТОРИЗОВАН -->
+                   
                     <div class="auth-buttons">
                         <a class="btn btn-primary btn-glow" href="/Chat">
-                            <span class="icon">💬</span> Open Chat
+                            <span class="icon">💬</span> @GetOpenChatText(currentCulture)
                         </a>
                         <a class="btn btn-secondary btn-pulse" href="/Login">
-                            <span class="icon">🔐</span> Login
+                            <span class="icon">🔐</span> @GetLoginText(currentCulture)
                         </a>
                         <a class="btn btn-outline btn-neon" href="/Register">
-                            <span class="icon">✨</span> Register
+                            <span class="icon">✨</span> @GetRegisterText(currentCulture)
                         </a>
                     </div>
                 }
@@ -85,25 +111,237 @@
         </div>
     </section>
 
-    <!-- FEATURES -->
+    
     <section class="features">
         <div class="card animate-card" style="animation-delay: 0.1s">
             <div class="card-icon">🚀</div>
-            <h2>Fast Development</h2>
-            <p>Powered by Razor Pages, EF Core, and PostgreSQL.</p>
+            <h2>@GetFastDevText(currentCulture)</h2>
+            <p>@GetFastDevDescText(currentCulture)</p>
         </div>
         <div class="card animate-card" style="animation-delay: 0.2s">
             <div class="card-icon">⚡</div>
-            <h2>Real-time AI</h2>
-            <p>Chat with Hugging Face models instantly.</p>
+            <h2>@GetRealTimeAIText(currentCulture)</h2>
+            <p>@GetRealTimeAIDescText(currentCulture)</p>
         </div>
         <div class="card animate-card" style="animation-delay: 0.3s">
             <div class="card-icon">🛡️</div>
-            <h2>Secure & Scalable</h2>
-            <p>Cookie Auth, PostgreSQL, modular design.</p>
+            <h2>@GetSecureText(currentCulture)</h2>
+            <p>@GetSecureDescText(currentCulture)</p>
         </div>
     </section>
 </div>
+
+<style>
+    
+    .language-switcher {
+        position: fixed;
+        top: 25px;
+        right: 25px;
+        z-index: 1000;
+    }
+
+        .language-switcher form {
+            display: inline-block;
+        }
+
+    .lang-buttons {
+        display: flex;
+        gap: 0;
+        background: rgba(15, 23, 42, 0.9);
+        backdrop-filter: blur(25px);
+        border-radius: 20px;
+        padding: 6px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 4px 20px rgba(124, 58, 237, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+        .lang-buttons:hover {
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.5), 0 6px 25px rgba(124, 58, 237, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+
+    .lang-btn {
+        padding: 14px 22px;
+        border: none;
+        border-radius: 16px;
+        background: transparent;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        color: #94a3b8;
+        white-space: nowrap;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 110px;
+        justify-content: center;
+        letter-spacing: 0.3px;
+    }
+
+      
+        .lang-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .lang-btn:hover::before {
+            left: 100%;
+        }
+
+        
+        .lang-btn:hover {
+            background: rgba(124, 58, 237, 0.12);
+            color: #c4b5fd;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+      
+        .lang-btn.active {
+            background: linear-gradient(135deg, #7c3aed, #6366f1);
+            color: white;
+            box-shadow: 0 6px 25px rgba(124, 58, 237, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+            transform: translateY(0);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+            
+            .lang-btn.active::after {
+                content: '';
+                position: absolute;
+                bottom: 6px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 24px;
+                height: 3px;
+                background: linear-gradient(90deg, #f0abfc, #a5b4fc);
+                border-radius: 2px;
+                box-shadow: 0 0 8px rgba(240, 171, 252, 0.6);
+            }
+
+       
+        .lang-btn .flag {
+            font-size: 18px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transform-origin: center;
+        }
+
+        .lang-btn:hover .flag {
+            transform: scale(1.3) rotate(8deg);
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.4));
+        }
+
+        .lang-btn.active .flag {
+            transform: scale(1.2);
+            filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.5));
+        }
+
+        
+        .lang-btn:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1px;
+            height: 60%;
+            background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.1), transparent);
+        }
+
+        .lang-btn.active:not(:last-child)::after {
+            background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.2), transparent);
+        }
+
+    
+    .language-switcher {
+        animation: slideInFromTop 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s both;
+    }
+
+    @@keyframes slideInFromTop {
+        from {
+            opacity: 0;
+            transform: translateY(-40px) scale(0.9);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    
+    @@keyframes attentionPulse {
+        0%, 100% {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 4px 20px rgba(124, 58, 237, 0.15);
+        }
+
+        50% {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 4px 20px rgba(124, 58, 237, 0.3), 0 0 0 2px rgba(124, 58, 237, 0.1);
+        }
+    }
+
+    .language-switcher:focus-within .lang-buttons {
+        animation: attentionPulse 2s ease-in-out;
+    }
+
+    
+    @@media (max-width: 768px) {
+        .language-switcher {
+            position: relative;
+            top: auto;
+            right: auto;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .lang-buttons {
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 320px;
+            gap: 4px;
+            padding: 8px;
+        }
+
+        .lang-btn {
+            min-width: 95px;
+            padding: 12px 16px;
+            font-size: 13px;
+            border-radius: 12px;
+        }
+
+            .lang-btn .flag {
+                font-size: 16px;
+            }
+    }
+
+    @@media (max-width: 480px) {
+        .lang-buttons {
+            max-width: 280px;
+        }
+
+        .lang-btn {
+            min-width: 85px;
+            padding: 10px 12px;
+            font-size: 12px;
+        }
+
+            .lang-btn .flag {
+                font-size: 14px;
+            }
+    }
+</style>
 
 @functions {
     private string GetInitials(string name)
@@ -113,5 +351,176 @@
         return parts.Length >= 2
             ? $"{char.ToUpper(parts[0][0])}{char.ToUpper(parts[1][0])}"
             : $"{char.ToUpper(name[0])}";
+    }
+
+    
+    private string GetWelcomeText(string culture)
+    {
+        return culture switch
+        {
+            "ru" => "Добро пожаловать в",
+            "kk" => "Қош келдіңіз",
+            _ => "Welcome to"
+        };
+    }
+
+    private string GetDescriptionText(string culture)
+    {
+        return culture switch
+        {
+            "ru" => "Ваш интеллектуальный помощник на <strong>ASP.NET Core 8</strong> и Razor Pages.",
+            "kk" => "Сіздің интеллектуалды көмекшіңіз <strong>ASP.NET Core 8</strong> және Razor Pages негізінде.",
+            _ => "Your intelligent assistant built with <strong>ASP.NET Core 8</strong> and Razor Pages."
+        };
+    }
+
+    private string GetViewProfileText(string culture)
+    {
+        return culture switch
+        {
+            "ru" => "Посмотреть профиль",
+            "kk" => "Профильді көру",
+            _ => "View Profile"
+        };
+    }
+
+    private string GetGreetingText(string culture)
+    {
+        return culture switch
+        {
+            "ru" => "Привет",
+            "kk" => "Сәлем",
+            _ => "Hey"
+        };
+    }
+
+    private string GetClickProfileText(string culture)
+    {
+        return culture switch
+        {
+            "ru" => "Нажмите для просмотра профиля",
+            "kk" => "Профильді көру үшін басыңыз",
+            _ => "Click to view profile"
+        };
+    }
+
+    private string GetKazakhstanText(string culture)
+    {
+        return culture switch
+        {
+            "ru" => "Казахстан",
+            "kk" => "Қазақстан",
+            _ => "Kazakhstan"
+        };
+    }
+
+    private string GetChatText(string culture)
+    {
+        return culture switch
+        {
+            "ru" => "Чат",
+            "kk" => "Чат",
+            _ => "Chat"
+        };
+    }
+
+    private string GetLogoutText(string culture)
+    {
+        return culture switch
+        {
+            "ru" => "Выйти",
+            "kk" => "Шығу",
+            _ => "Logout"
+        };
+    }
+
+    private string GetOpenChatText(string culture)
+    {
+        return culture switch
+        {
+            "ru" => "Открыть чат",
+            "kk" => "Чатты ашу",
+            _ => "Open Chat"
+        };
+    }
+
+    private string GetLoginText(string culture)
+    {
+        return culture switch
+        {
+            "ru" => "Войти",
+            "kk" => "Кіру",
+            _ => "Login"
+        };
+    }
+
+    private string GetRegisterText(string culture)
+    {
+        return culture switch
+        {
+            "ru" => "Регистрация",
+            "kk" => "Тіркелу",
+            _ => "Register"
+        };
+    }
+
+    private string GetFastDevText(string culture)
+    {
+        return culture switch
+        {
+            "ru" => "Быстрая разработка",
+            "kk" => "Жылдам әзірлеу",
+            _ => "Fast Development"
+        };
+    }
+
+    private string GetFastDevDescText(string culture)
+    {
+        return culture switch
+        {
+            "ru" => "На основе Razor Pages, EF Core и PostgreSQL.",
+            "kk" => "Razor Pages, EF Core және PostgreSQL негізінде.",
+            _ => "Powered by Razor Pages, EF Core, and PostgreSQL."
+        };
+    }
+
+    private string GetRealTimeAIText(string culture)
+    {
+        return culture switch
+        {
+            "ru" => "AI в реальном времени",
+            "kk" => "Нақты уақыттағы AI",
+            _ => "Real-time AI"
+        };
+    }
+
+    private string GetRealTimeAIDescText(string culture)
+    {
+        return culture switch
+        {
+            "ru" => "Общайтесь с моделями Hugging Face мгновенно.",
+            "kk" => "Hugging Face модельдерімен лезде сөйлесіңіз.",
+            _ => "Chat with Hugging Face models instantly."
+        };
+    }
+
+    private string GetSecureText(string culture)
+    {
+        return culture switch
+        {
+            "ru" => "Безопасно и масштабируемо",
+            "kk" => "Қауіпсіз және масштабталатын",
+            _ => "Secure & Scalable"
+        };
+    }
+
+    private string GetSecureDescText(string culture)
+    {
+        return culture switch
+        {
+            "ru" => "Cookie аутентификация, PostgreSQL, модульный дизайн.",
+            "kk" => "Cookie аутентификация, PostgreSQL, модульді дизайн.",
+            _ => "Cookie Auth, PostgreSQL, modular design."
+        };
     }
 }

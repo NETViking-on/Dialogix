@@ -2,15 +2,15 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Dialogix.Models;
 using Dialogix.Services;
-using Microsoft.AspNetCore.Authorization; // ← Добавь!
+using Microsoft.AspNetCore.Authorization; 
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Dialogix.Pages
 {
-    [Authorize] // ← ТОЛЬКО АВТОРИЗОВАННЫЕ!
-    [IgnoreAntiforgeryToken] // Для AJAX
+    [Authorize] 
+    [IgnoreAntiforgeryToken] 
     public class ChatModel : PageModel
     {
         private readonly Data.IChatRepository _chatRepository;

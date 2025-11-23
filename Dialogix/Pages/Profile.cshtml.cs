@@ -19,29 +19,29 @@ namespace Dialogix.Pages
             _logger = logger;
         }
 
-        // Основная информация пользователя
+        
         public string Username { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public DateTime MemberSince { get; set; }
 
-        // Статистика чатов
+        
         public int TotalMessages { get; set; }
         public int TodayMessages { get; set; }
         public int ThisWeekMessages { get; set; }
         public int ThisMonthMessages { get; set; }
 
-        // Активность
+       
         public List<ChatMessage> RecentMessages { get; set; } = new();
         public Dictionary<string, int> MessagesPerDay { get; set; } = new();
         public Dictionary<string, int> HourlyActivity { get; set; } = new();
 
-        // Аналитика
+       
         public int AverageMessageLength { get; set; }
         public string MostActiveDay { get; set; } = "No data";
         public string MostActiveHour { get; set; } = "No data";
         public int LongestConversation { get; set; }
 
-        // Достижения
+        
         public List<Achievement> Achievements { get; set; } = new();
         public int AchievementProgress { get; set; }
 
@@ -77,7 +77,7 @@ namespace Dialogix.Pages
         var user = await _chatRepository.GetUserByUsernameAsync(User.Identity.Name);
         if (user != null)
         {
-            // Обновляем только если переданы значения
+           
             if (!string.IsNullOrEmpty(ProfileUpdate.DisplayName?.Trim()))
             {
                 user.DisplayName = ProfileUpdate.DisplayName.Trim();
@@ -91,7 +91,7 @@ namespace Dialogix.Pages
             await _chatRepository.UpdateUserAsync(user);
             TempData["SuccessMessage"] = "Profile updated successfully!";
             
-            // Обновляем данные на странице
+            
             await LoadUserData();
         }
         else
@@ -145,12 +145,12 @@ namespace Dialogix.Pages
             var user = await _chatRepository.GetUserByUsernameAsync(User.Identity.Name);
             if (user != null)
             {
-                // Используем DisplayName если есть, иначе обычный Username
+               
                 Username = !string.IsNullOrEmpty(user.DisplayName) ? user.DisplayName : user.Username;
                 Email = user.Email;
                 MemberSince = user.CreatedAt;
 
-                // Предзаполняем форму текущими значениями
+               
                 if (ProfileUpdate == null)
                 {
                     ProfileUpdate = new ProfileUpdateModel();
@@ -215,7 +215,7 @@ namespace Dialogix.Pages
             MostActiveDay = await _chatRepository.GetMostActiveDayAsync(username);
             MostActiveHour = await _chatRepository.GetMostActiveHourAsync(username);
 
-            // Расчет самой длинной беседы
+            
             var messages = await _chatRepository.GetUserMessagesAsync(username);
             LongestConversation = CalculateLongestConversation(messages);
         }

@@ -2,6 +2,8 @@
 using Dialogix.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,16 +11,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Конфигурация
 var configuration = builder.Configuration;
 
+// Локализация
+builder.Services.AddLocalization();
+
 // Сервисы
-builder.Services.AddRazorPages(options =>
-{
-    options.Conventions.AuthorizePage("/Chat");
-    options.Conventions.AuthorizePage("/Profile");
-    options.Conventions.AllowAnonymousToPage("/Index");
-    options.Conventions.AllowAnonymousToPage("/Login");
-    options.Conventions.AllowAnonymousToPage("/Register");
-    options.Conventions.AllowAnonymousToPage("/Error");
-});
+builder.Services.AddRazorPages();
 
 // Сессии
 builder.Services.AddSession(options =>
@@ -36,7 +33,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<ChatDbContext>(options =>
     options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
-// Репозиторий - исправленные ссылки
+// Репозиторий
 builder.Services.AddScoped<Dialogix.Data.IChatRepository, Dialogix.Data.ChatRepository>();
 
 // Аутентификация
@@ -68,21 +65,16 @@ builder.Services.AddHttpClient<IBotService, BotService>(client =>
     client.Timeout = TimeSpan.FromSeconds(60);
 });
 
-// Логирование
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
-builder.Logging.AddDebug();
-
-if (builder.Environment.IsDevelopment())
-{
-    builder.Logging.SetMinimumLevel(LogLevel.Debug);
-}
-else
-{
-    builder.Logging.SetMinimumLevel(LogLevel.Information);
-}
-
 var app = builder.Build();
+
+// Настройка локализации
+var supportedCultures = new[] { "en", "ru", "kk" };
+var localizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture(supportedCultures[0])
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures);
+
+app.UseRequestLocalization(localizationOptions);
 
 // Middleware pipeline
 if (!app.Environment.IsDevelopment())

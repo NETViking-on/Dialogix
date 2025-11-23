@@ -1,7 +1,7 @@
 ﻿@page
 @model PrivacyModel
 @{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Privacy Policy & Terms of Use - ARSU AI MANAGER";
 }
 
 @section Styles {
@@ -9,13 +9,333 @@
 }
 
 <div class="privacy-page">
-    <h1>@ViewData["Title"]</h1>
+    <div class="privacy-header">
+        <h1>Privacy Policy & Terms of Use</h1>
+        <p class="last-updated">Last updated: @DateTime.Now.ToString("MMMM dd, yyyy")</p>
+    </div>
+
     <div class="privacy-container">
-        <p>
-            Use this page to detail your site's privacy policy.
-        </p>
-        <p>
-            You can describe how user data is collected, stored, and used here.
-        </p>
+        <section class="policy-section">
+            <h2>📋 Terms of Use</h2>
+            <div class="policy-content">
+                <h3>1. Acceptance of Terms</h3>
+                <p>By accessing and using ARSU AI MANAGER, you accept and agree to be bound by the terms and provision of this agreement.</p>
+
+                <h3>2. User Responsibilities</h3>
+                <ul>
+                    <li>You must be at least 13 years old to use this service</li>
+                    <li>You are responsible for maintaining the confidentiality of your account</li>
+                    <li>You agree not to use the service for any illegal or unauthorized purpose</li>
+                    <li>You must not transmit any worms, viruses or any code of a destructive nature</li>
+                </ul>
+
+                <h3>3. Acceptable Use</h3>
+                <p>You agree not to use the ARSU AI MANAGER to:</p>
+                <ul>
+                    <li>Generate harmful, abusive, or illegal content</li>
+                    <li>Impersonate any person or entity</li>
+                    <li>Harass, abuse, or harm another person</li>
+                    <li>Submit false or misleading information</li>
+                    <li>Interfere with or disrupt the service</li>
+                </ul>
+
+                <h3>4. AI-Generated Content</h3>
+                <p>The AI responses are generated automatically and may:</p>
+                <ul>
+                    <li>Contain inaccuracies or errors</li>
+                    <li>Not reflect the views of ARSU or its affiliates</li>
+                    <li>Be inappropriate for certain audiences</li>
+                    <li>Require human verification for critical decisions</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="policy-section">
+            <h2>🔒 Privacy Policy</h2>
+            <div class="policy-content">
+                <h3>1. Information We Collect</h3>
+                <p>We collect the following types of information:</p>
+                <ul>
+                    <li><strong>Account Information:</strong> Username, email address, password</li>
+                    <li><strong>Chat Data:</strong> Messages you send and receive through the AI chat</li>
+                    <li><strong>Usage Data:</strong> How you interact with our service</li>
+                    <li><strong>Technical Data:</strong> IP address, browser type, device information</li>
+                </ul>
+
+                <h3>2. How We Use Your Information</h3>
+                <ul>
+                    <li>To provide and maintain our service</li>
+                    <li>To improve and personalize your experience</li>
+                    <li>To monitor usage and analyze trends</li>
+                    <li>To communicate with you about service updates</li>
+                    <li>To prevent abuse and ensure security</li>
+                </ul>
+
+                <h3>3. Data Storage and Security</h3>
+                <ul>
+                    <li>Chat messages are stored securely in our database</li>
+                    <li>We implement industry-standard security measures</li>
+                    <li>Data is encrypted in transit and at rest</li>
+                    <li>Regular security audits are conducted</li>
+                </ul>
+
+                <h3>4. Data Retention</h3>
+                <ul>
+                    <li>Chat messages: Retained for 12 months</li>
+                    <li>Account data: Retained while account is active</li>
+                    <li>Analytics data: Retained for 24 months</li>
+                    <li>You can request data deletion at any time</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="policy-section">
+            <h2>🤖 AI-Specific Policies</h2>
+            <div class="policy-content">
+                <h3>1. AI Limitations</h3>
+                <p>Our AI assistant has the following limitations:</p>
+                <ul>
+                    <li>May generate incorrect or biased information</li>
+                    <li>Has knowledge cutoff date (training data limitation)</li>
+                    <li>Cannot provide legal, medical, or financial advice</li>
+                    <li>Should not be used for critical decision-making</li>
+                    <li>May occasionally produce unexpected responses</li>
+                </ul>
+
+                <h3>2. Content Moderation</h3>
+                <ul>
+                    <li>We monitor conversations for abusive content</li>
+                    <li>We reserve the right to suspend accounts violating terms</li>
+                    <li>Users can report inappropriate AI responses</li>
+                    <li>We continuously improve our content filters</li>
+                </ul>
+
+                <h3>3. Third-Party Services</h3>
+                <p>We use Hugging Face API for AI model inference. Your messages are processed according to their privacy policy.</p>
+            </div>
+        </section>
+
+        <section class="policy-section">
+            <h2>📝 User Rights</h2>
+            <div class="policy-content">
+                <h3>1. Your Rights</h3>
+                <ul>
+                    <li><strong>Access:</strong> You can access your personal data</li>
+                    <li><strong>Correction:</strong> You can correct inaccurate data</li>
+                    <li><strong>Deletion:</strong> You can request deletion of your data</li>
+                    <li><strong>Export:</strong> You can export your chat history</li>
+                    <li><strong>Objection:</strong> You can object to certain data processing</li>
+                </ul>
+
+                <h3>2. Account Management</h3>
+                <ul>
+                    <li>You can delete your account at any time</li>
+                    <li>Account deletion removes all associated data</li>
+                    <li>You can download your data before deletion</li>
+                    <li>Contact support for account-related requests</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="policy-section">
+            <h2>⚖️ Legal</h2>
+            <div class="policy-content">
+                <h3>1. Disclaimer</h3>
+                <p>ARSU AI MANAGER is provided "as is" without any warranties. We are not responsible for:</p>
+                <ul>
+                    <li>Accuracy of AI-generated content</li>
+                    <li>Decisions made based on AI responses</li>
+                    <li>Service interruptions or downtime</li>
+                    <li>Third-party content or links</li>
+                </ul>
+
+                <h3>2. Limitation of Liability</h3>
+                <p>To the maximum extent permitted by law, ARSU shall not be liable for any indirect, incidental, special, consequential or punitive damages.</p>
+
+                <h3>3. Changes to Terms</h3>
+                <p>We reserve the right to modify these terms at any time. Continued use of the service after changes constitutes acceptance of the new terms.</p>
+
+                <h3>4. Governing Law</h3>
+                <p>These terms shall be governed by the laws of the Republic of Kazakhstan without regard to its conflict of law provisions.</p>
+            </div>
+        </section>
+
+        <section class="contact-section">
+            <h2>📞 Contact Information</h2>
+            <div class="contact-info">
+                <p>If you have any questions about these Terms, please contact us:</p>
+                <ul>
+                    <li><strong>Email:</strong> ilyaprogrammer10@gmail.com</li>
+                    <li><strong>Developer:</strong> NETViking-on (GitHub)</li>
+                    <li><strong>Institution:</strong> Zhubanov University</li>
+                </ul>
+            </div>
+        </section>
     </div>
 </div>
+
+<style>
+    .privacy-page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+        font-family: 'Inter', sans-serif;
+        line-height: 1.6;
+        color: #333;
+    }
+
+    .privacy-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+        .privacy-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+    .last-updated {
+        color: #718096;
+        font-size: 1rem;
+        font-style: italic;
+    }
+
+    .privacy-container {
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+    }
+
+    .policy-section {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e2e8f0;
+    }
+
+        .policy-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #7c3aed;
+        }
+
+        .policy-section h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #4a5568;
+            margin: 1.5rem 0 0.5rem 0;
+        }
+
+    .policy-content {
+        color: #4a5568;
+    }
+
+        .policy-content ul {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .policy-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+
+        .policy-content strong {
+            color: #2d3748;
+            font-weight: 600;
+        }
+
+    .contact-section {
+        background: linear-gradient(135deg, #f7fafc, #edf2f7);
+        border-radius: 12px;
+        padding: 2rem;
+        text-align: center;
+    }
+
+        .contact-section h2 {
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+        }
+
+    .contact-info {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+        .contact-info ul {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .contact-info li {
+            margin-bottom: 0.75rem;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+    
+    @@media (max-width: 768px) {
+        .privacy-page {
+            padding: 1rem 0.5rem;
+        }
+
+        .privacy-header h1 {
+            font-size: 2rem;
+        }
+
+        .policy-section {
+            padding: 1.5rem;
+        }
+
+            .policy-section h2 {
+                font-size: 1.3rem;
+            }
+
+            .policy-section h3 {
+                font-size: 1.1rem;
+            }
+    }
+
+    @@media (max-width: 480px) {
+        .privacy-header h1 {
+            font-size: 1.75rem;
+        }
+
+        .policy-section {
+            padding: 1rem;
+        }
+
+            .policy-section h2 {
+                font-size: 1.2rem;
+            }
+    }
+
+
+    @@media print {
+        .privacy-page {
+            max-width: none;
+            padding: 0;
+        }
+
+        .policy-section {
+            box-shadow: none;
+            border: 1px solid #ccc;
+            page-break-inside: avoid;
+        }
+
+        .contact-section {
+            background: none;
+        }
+    }
+</style>

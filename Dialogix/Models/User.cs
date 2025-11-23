@@ -24,7 +24,7 @@ namespace Dialogix.Models
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        // Добавляем недостающие поля
+      
         [MaxLength(500)]
         public string? Bio { get; set; }
 

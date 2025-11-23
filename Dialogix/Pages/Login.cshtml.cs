@@ -23,7 +23,7 @@ public class LoginModel : PageModel
     [BindProperty] public string Password { get; set; } = string.Empty;
     [BindProperty] public string? ReturnUrl { get; set; }
 
-    // === USER INFO (KZ, 10 ÌÓˇ·ˇ 2025) ===
+  
     public string CurrentTime => TimeZoneInfo.ConvertTimeFromUtc(
         DateTime.UtcNow,
         TimeZoneInfo.FindSystemTimeZoneById("Central Asia Standard Time")
@@ -53,7 +53,7 @@ public class LoginModel : PageModel
             return Page();
         }
 
-        // ¿¬“Œ–»«¿÷»ﬂ ◊≈–≈« COOKIE (Õ≈ Session!)
+        
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name, user.Username),
@@ -73,7 +73,7 @@ public class LoginModel : PageModel
                 ExpiresUtc = DateTimeOffset.UtcNow.AddDays(7)
             });
 
-        // –≈ƒ»–≈ “
+       
         return !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
             ? Redirect(returnUrl)
             : RedirectToPage("/Chat");

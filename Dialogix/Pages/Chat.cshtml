@@ -1,25 +1,62 @@
 ﻿@page
 @model Dialogix.Pages.ChatModel
 @{
-    ViewData["Title"] = "Dialogix AI Chat";
+    ViewData["Title"] = "ARSU AI Chat";
 }
 
 <link rel="stylesheet" href="~/css/chat.css" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="~/js/chat.js" defer></script>
 
 <div class="chat-page">
     <header class="chat-header">
         <div class="header-content">
-            <h2 class="header-title">
-                <span class="brand-gradient">DIALOGIX</span>
-                <span class="neon-accent">AI</span>
-                CHAT
-            </h2>
+            <div class="header-left">
+                <h2 class="header-title">
+                    <span class="brand-gradient">ARSU MANAGER</span>
+                    <span class="neon-accent">AI</span>
+                    CHAT
+                </h2>
+                <div class="model-selector">
+                    <div class="model-dropdown">
+                        <button class="model-dropdown-btn" id="modelDropdownBtn">
+                            <span class="current-model" id="currentModel">
+                                <span class="model-icon">📚</span>
+                                Creative Writer
+                            </span>
+                            <span class="dropdown-arrow">▼</span>
+                        </button>
+                        <div class="model-dropdown-content" id="modelDropdown">
+                            <div class="model-option active" data-model="creative" data-icon="📚">
+                                <span class="model-icon">📚</span>
+                                <div class="model-info">
+                                    <span class="model-name">Creative Writer</span>
+                                    <span class="model-desc">Для литературных текстов и творчества</span>
+                                </div>
+                            </div>
+                            <div class="model-option" data-model="math" data-icon="🧮">
+                                <span class="model-icon">🧮</span>
+                                <div class="model-info">
+                                    <span class="model-name">Math Genius</span>
+                                    <span class="model-desc">Специалист по математике и анализу</span>
+                                </div>
+                            </div>
+                            <div class="model-option" data-model="code" data-icon="💻">
+                                <span class="model-icon">💻</span>
+                                <div class="model-info">
+                                    <span class="model-name">Code Assistant</span>
+                                    <span class="model-desc">Помощник в программировании</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="header-info">
                 <span class="status-indicator">
                     <span class="pulse-dot"></span>
-                    Live
+                    <span id="statusText">Creative Writer активен</span>
                 </span>
             </div>
         </div>
@@ -88,6 +125,12 @@
         justify-content: space-between;
         align-items: center;
         width: 100%;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
     }
 
     .header-title {
@@ -168,12 +211,117 @@
         font-size: 1.1em;
     }
 
-    /* ФИОЛЕТОВАЯ ШАПКА */
     .chat-header {
         background: linear-gradient(135deg, #7c3aed, #6d28d9, #5b21b6) !important;
         backdrop-filter: none !important;
         border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
         box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4) !important;
+    }
+
+    /* Model Selector Styles */
+    .model-selector {
+        position: relative;
+    }
+
+    .model-dropdown {
+        position: relative;
+    }
+
+    .model-dropdown-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+
+        .model-dropdown-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+    .current-model {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 500;
+    }
+
+    .model-icon {
+        font-size: 1.1em;
+    }
+
+    .dropdown-arrow {
+        font-size: 0.8em;
+        transition: transform 0.3s ease;
+    }
+
+    .model-dropdown-content {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        margin-top: 0.5rem;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 12px;
+        padding: 0.5rem;
+        min-width: 250px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+        z-index: 1000;
+    }
+
+        .model-dropdown-content.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+    .model-option {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: #374151;
+    }
+
+        .model-option:hover {
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        .model-option.active {
+            background: rgba(124, 58, 237, 0.15);
+            border-left: 3px solid #7c3aed;
+        }
+
+    .model-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .model-name {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #1f2937;
+    }
+
+    .model-desc {
+        font-size: 0.75rem;
+        color: #6b7280;
+        margin-top: 0.1rem;
     }
 
     @@keyframes pulse {
@@ -188,7 +336,6 @@
         }
     }
 
-    /* Дополнительные стили для контрастности текста */
     .header-title {
         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
@@ -196,4 +343,153 @@
     .status-indicator {
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     }
+
+    /* Анимация смены модели */
+    .model-switch-animation {
+        animation: modelSwitch 0.5s ease;
+    }
+
+    @@keyframes modelSwitch {
+        0% {
+            opacity: 0.5;
+            transform: translateY(-5px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdownBtn = document.getElementById('modelDropdownBtn');
+        const dropdown = document.getElementById('modelDropdown');
+        const currentModel = document.getElementById('currentModel');
+        const statusText = document.getElementById('statusText');
+
+        // Открытие/закрытие dropdown
+        dropdownBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dropdown.classList.toggle('show');
+            dropdownBtn.querySelector('.dropdown-arrow').style.transform =
+                dropdown.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+        });
+
+        // Выбор модели
+        document.querySelectorAll('.model-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const modelName = this.querySelector('.model-name').textContent;
+                const modelIcon = this.getAttribute('data-icon');
+                const modelDesc = this.querySelector('.model-desc').textContent;
+
+                // Обновляем текущую модель
+                currentModel.innerHTML = `
+                    <span class="model-icon">${modelIcon}</span>
+                    ${modelName}
+                `;
+
+                // Обновляем статус
+                statusText.textContent = `${modelName} активен`;
+
+                // Анимация смены
+                currentModel.classList.add('model-switch-animation');
+                setTimeout(() => {
+                    currentModel.classList.remove('model-switch-animation');
+                }, 500);
+
+                // Закрываем dropdown
+                dropdown.classList.remove('show');
+                dropdownBtn.querySelector('.dropdown-arrow').style.transform = 'rotate(0deg)';
+
+                // Показываем уведомление о смене модели
+                showModelSwitchNotification(modelName, modelDesc);
+            });
+        });
+
+        // Закрытие dropdown при клике вне его
+        document.addEventListener('click', function() {
+            dropdown.classList.remove('show');
+            dropdownBtn.querySelector('.dropdown-arrow').style.transform = 'rotate(0deg)';
+        });
+
+        function showModelSwitchNotification(modelName, modelDesc) {
+            // Создаем уведомление
+            const notification = document.createElement('div');
+            notification.className = 'model-notification';
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <span class="notification-icon">✅</span>
+                    <div class="notification-text">
+                        <strong>Модель изменена</strong>
+                        <span>Теперь используется: ${modelName}</span>
+                    </div>
+                </div>
+            `;
+
+            // Стили для уведомления
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(20px);
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                border-radius: 12px;
+                padding: 1rem;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                z-index: 10000;
+                transform: translateX(400px);
+                opacity: 0;
+                transition: all 0.5s ease;
+                min-width: 300px;
+            `;
+
+            document.body.appendChild(notification);
+
+            // Анимация появления
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+                notification.style.opacity = '1';
+            }, 100);
+
+            // Автоматическое скрытие через 3 секунды
+            setTimeout(() => {
+                notification.style.transform = 'translateX(400px)';
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 500);
+            }, 3000);
+        }
+
+        // Добавляем скрытое поле для "модели" в форму (для видимости)
+        const chatForm = document.querySelector('.chat-form');
+        const hiddenModelInput = document.createElement('input');
+        hiddenModelInput.type = 'hidden';
+        hiddenModelInput.name = 'SelectedModel';
+        hiddenModelInput.id = 'selectedModel';
+        hiddenModelInput.value = 'creative';
+        chatForm.appendChild(hiddenModelInput);
+
+        // Обновляем скрытое поле при смене модели
+        document.querySelectorAll('.model-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const model = this.getAttribute('data-model');
+                document.getElementById('selectedModel').value = model;
+            });
+        });
+    });
+
+    function submitForm(form) {
+        // Можно добавить логику для разных "моделей" если нужно
+        const selectedModel = document.getElementById('selectedModel').value;
+        console.log('Using model:', selectedModel);
+
+        // Продолжаем стандартную отправку формы
+        return true;
+    }
+</script>

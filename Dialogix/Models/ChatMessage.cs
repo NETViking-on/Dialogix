@@ -20,7 +20,7 @@ namespace Dialogix.Models
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        // Вычисляемые свойства для обратной совместимости
+        
         [NotMapped]
         public string Content => Text;
 

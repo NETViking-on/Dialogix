@@ -1,24 +1,41 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Localization;
+using System.Globalization;
 
-namespace Dialogix.Pages;
-
-public class IndexModel : PageModel
+namespace Dialogix.Pages
 {
-    private readonly ILogger<IndexModel> _logger;
-
-    public string WelcomeMessage { get; private set; } = string.Empty;
-    public bool IsLoggedIn => User.Identity?.IsAuthenticated ?? false;
-    public string Username => User.Identity?.Name ?? "Guest";
-
-    public IndexModel(ILogger<IndexModel> logger)
+    public class IndexModel : PageModel
     {
-        _logger = logger;
-    }
+        private readonly IStringLocalizer<IndexModel> _localizer;
 
-    public void OnGet()
-    {
-        WelcomeMessage = "Welcome to Dialogix – your chatbot playground!";
-        _logger.LogInformation("Index page visited at {Time} by {User}", DateTime.UtcNow, Username);
+        public IndexModel(IStringLocalizer<IndexModel> localizer)
+        {
+            _localizer = localizer;
+        }
+
+        public bool IsLoggedIn => User.Identity?.IsAuthenticated ?? false;
+        public string Username => User.Identity?.Name ?? "User";
+        public string CurrentCulture => CultureInfo.CurrentCulture.Name;
+
+        public void OnGet()
+        {
+        }
+
+        public IActionResult OnPostSetLanguage(string culture, string returnUrl)
+        {
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions
+                {
+                    Expires = DateTimeOffset.UtcNow.AddYears(1),
+                    IsEssential = true
+                }
+            );
+
+            return LocalRedirect(returnUrl);
+        }
     }
 }

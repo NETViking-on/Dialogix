@@ -111,7 +111,7 @@
             text-shadow: 0 0 10px rgba(196, 181, 253, 0.5);
         }
 
-/* Анимации */
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -148,7 +148,7 @@
     }
 }
 
-/* Дополнительные стили для контента */
+
 .privacy-section {
     margin-bottom: 2.5rem;
     padding-bottom: 2rem;
@@ -184,7 +184,7 @@
         font-size: 0.8rem;
     }
 
-/* Адаптивность */
+
 @media (max-width: 768px) {
     .privacy-page {
         margin-top: 1rem;
@@ -204,7 +204,7 @@
         }
 }
 
-/* Эффект свечения для важных элементов */
+
 .privacy-important {
     position: relative;
 }

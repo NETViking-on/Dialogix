@@ -12,7 +12,7 @@ namespace Dialogix.Data
             _context = context;
         }
 
-        // User operations
+       
         public async Task<User?> GetUserByUsernameAsync(string username)
         {
             return await _context.Users
@@ -44,7 +44,7 @@ namespace Dialogix.Data
                 .AnyAsync(u => u.Username == username || u.Email == email);
         }
 
-        // Message operations
+      
         public async Task<List<ChatMessage>> GetRecentMessagesAsync(int count = 50)
         {
             return await _context.ChatMessages
@@ -90,7 +90,7 @@ namespace Dialogix.Data
 
         public async Task<int> GetUserMessageCountByPeriodAsync(string username, DateTime start, DateTime? end = null)
         {
-            // Убедимся, что даты в UTC
+            
             var startUtc = start.Kind == DateTimeKind.Unspecified
                 ? DateTime.SpecifyKind(start, DateTimeKind.Utc)
                 : start.ToUniversalTime();
@@ -112,7 +112,7 @@ namespace Dialogix.Data
             return await query.CountAsync();
         }
 
-        // Analytics operations
+        
         public async Task<Dictionary<string, int>> GetMessagesPerDayAsync(string username, int days = 7)
         {
             var startDate = DateTime.UtcNow.Date.AddDays(-days + 1);

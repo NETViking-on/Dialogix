@@ -73,4 +73,26 @@
             messagesList.removeChild(li);
         }
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        
+        initializeModelSelector();
+    });
+
+    function initializeModelSelector() {
+        const savedModel = localStorage.getItem('selectedAIModel');
+        if (savedModel) {
+            const modelOption = document.querySelector(`[data-model="${savedModel}"]`);
+            if (modelOption) {
+                modelOption.click();
+            }
+        }
+    }
+
+   
+    function saveModelSelection(model) {
+        localStorage.setItem('selectedAIModel', model);
+    }
+
+
 });

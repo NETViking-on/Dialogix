@@ -12,7 +12,7 @@ namespace Dialogix.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Конфигурация для ChatMessage
+            
             modelBuilder.Entity<ChatMessage>(entity =>
             {
                 entity.ToTable("ChatMessages");
@@ -25,7 +25,7 @@ namespace Dialogix.Data
                 entity.HasIndex(e => e.CreatedAt);
             });
 
-            // Конфигурация для User
+            
             modelBuilder.Entity<User>(entity =>
             {
                 entity.ToTable("Users");

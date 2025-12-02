@@ -1,113 +1,1288 @@
 ﻿@page
 @model Dialogix.Pages.ChatModel
 @{
-    ViewData["Title"] = "ARSU AI Chat";
+    ViewData["Title"] = "ARSU AI Chat - Multi-Model Intelligence Platform";
 }
 
 <link rel="stylesheet" href="~/css/chat.css" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="~/js/chat.js" defer></script>
 
-<div class="chat-page">
-    <header class="chat-header">
-        <div class="header-content">
-            <div class="header-left">
-                <h2 class="header-title">
-                    <span class="brand-gradient">ARSU MANAGER</span>
-                    <span class="neon-accent">AI</span>
-                    CHAT
-                </h2>
-                <div class="model-selector">
-                    <div class="model-dropdown">
-                        <button class="model-dropdown-btn" id="modelDropdownBtn">
-                            <span class="current-model" id="currentModel">
-                                <span class="model-icon">📚</span>
-                                Creative Writer
-                            </span>
-                            <span class="dropdown-arrow">▼</span>
-                        </button>
-                        <div class="model-dropdown-content" id="modelDropdown">
-                            <div class="model-option active" data-model="creative" data-icon="📚">
-                                <span class="model-icon">📚</span>
-                                <div class="model-info">
-                                    <span class="model-name">Creative Writer</span>
-                                    <span class="model-desc">Для литературных текстов и творчества</span>
+<div class="ai-platform">
+    
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <div class="logo-animation">
+                    <div class="logo-orb"></div>
+                </div>
+                <span class="logo-text">ARSU AI</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <h3 class="nav-title">МОДЕЛИ ИИ</h3>
+                <div class="nav-items">
+                    <div class="nav-item active" data-model="creative">
+                        <i class="fas fa-feather-alt"></i>
+                        <span>Creative Writer</span>
+                        <div class="nav-badge">v2.3.1</div>
+                    </div>
+                    <div class="nav-item" data-model="math">
+                        <i class="fas fa-square-root-alt"></i>
+                        <span>Math Genius</span>
+                        <div class="nav-badge">v3.0.4</div>
+                    </div>
+                    <div class="nav-item" data-model="code">
+                        <i class="fas fa-code"></i>
+                        <span>Code Assistant</span>
+                        <div class="nav-badge">v2.8.2</div>
+                    </div>
+                    <div class="nav-item" data-model="science">
+                        <i class="fas fa-flask"></i>
+                        <span>Science Pro</span>
+                        <div class="nav-badge">v3.1.0</div>
+                    </div>
+                    <div class="nav-item" data-model="business">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Business AI</span>
+                        <div class="nav-badge">v2.9.5</div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="system-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Загрузка ЦП</span>
+                    <div class="stat-bar">
+                        <div class="stat-progress" style="width: 23%"></div>
+                    </div>
+                    <span class="stat-value">23%</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Память</span>
+                    <div class="stat-bar">
+                        <div class="stat-progress" style="width: 67%"></div>
+                    </div>
+                    <span class="stat-value">67%</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Сеть</span>
+                    <div class="stat-bar">
+                        <div class="stat-progress" style="width: 12%"></div>
+                    </div>
+                    <span class="stat-value">12%</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Основной контент -->
+    <main class="main-content">
+        <!-- Улучшенный хедер -->
+        <header class="chat-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <button class="sidebar-toggle" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="model-info-panel">
+                        <div class="current-model-display">
+                            <div class="model-avatar" id="modelAvatar">
+                                <i class="fas fa-feather-alt"></i>
+                            </div>
+                            <div class="model-details">
+                                <h2 class="model-name" id="modelName">Creative Writer</h2>
+                                <div class="model-specs">
+                                    <span class="spec">Специализированная модель</span>
+                                    <span class="spec-dot">•</span>
+                                    <span class="spec">Для творческих задач</span>
                                 </div>
                             </div>
-                            <div class="model-option" data-model="math" data-icon="🧮">
-                                <span class="model-icon">🧮</span>
-                                <div class="model-info">
-                                    <span class="model-name">Math Genius</span>
-                                    <span class="model-desc">Специалист по математике и анализу</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <div class="header-controls">
+                        <div class="control-group">
+                            <button class="control-btn" data-tooltip="Новый чат" id="newChatBtn">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button class="control-btn" data-tooltip="История чатов">
+                                <i class="fas fa-history"></i>
+                            </button>
+                        </div>
+
+                        <div class="system-status">
+                            <div class="status-indicators">
+                                <div class="status-item online">
+                                    <div class="status-dot"></div>
+                                    <span>Система онлайн</span>
                                 </div>
-                            </div>
-                            <div class="model-option" data-model="code" data-icon="💻">
-                                <span class="model-icon">💻</span>
-                                <div class="model-info">
-                                    <span class="model-name">Code Assistant</span>
-                                    <span class="model-desc">Помощник в программировании</span>
+                                <div class="status-item performance">
+                                    <div class="status-dot"></div>
+                                    <span>Оптимальная производительность</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="header-info">
-                <span class="status-indicator">
-                    <span class="pulse-dot"></span>
-                    <span id="statusText">Creative Writer активен</span>
-                </span>
-            </div>
-        </div>
-    </header>
 
-    <main class="chat-body" id="chatBody" aria-live="polite">
-        <div class="messages" id="messagesList">
-            @if (Model.Messages == null || !Model.Messages.Any())
-            {
-                <div class="chat-empty">
-                    <div class="empty-icon">💬</div>
-                    <p>No messages yet. Start a conversation with AI! 👋</p>
-                </div>
-            }
-            else
-            {
-                @foreach (var msg in Model.Messages)
+            
+            <div class="model-loading-bar" id="modelLoadingBar">
+                <div class="loading-progress"></div>
+                <div class="loading-text">Инициализация нейросети...</div>
+            </div>
+        </header>
+
+        
+        <div class="chat-body" id="chatBody" aria-live="polite">
+            <div class="messages" id="messagesList">
+                @if (Model.Messages == null || !Model.Messages.Any())
                 {
-                    <div class="message @(msg.User == "Bot" ? "bot-message" : "user-message")">
-                        <div class="bubble">
-                            <div class="meta">
-                                <span class="user">@msg.User</span>
-                                <span class="time">@msg.CreatedAt.ToLocalTime().ToString("HH:mm")</span>
-                            </div>
-                            <div class="text">@msg.Text</div>
-                        </div>
+                    <div class="chat-empty">
+                        <div class="empty-icon">💬</div>
+                        <p>No messages yet. Start a conversation with AI! 👋</p>
                     </div>
                 }
-            }
+                else
+                {
+                    @foreach (var msg in Model.Messages)
+                    {
+                        <div class="message @(msg.User == "Bot" ? "bot-message" : "user-message")">
+                            <div class="message-avatar">
+                                @if (msg.User == "Bot")
+                                {
+                                    <div class="avatar-bot">
+                                        <i class="fas fa-robot"></i>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="avatar-user">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                }
+                            </div>
+                            <div class="message-content">
+                                <div class="message-header">
+                                    <span class="message-sender">@msg.User</span>
+                                    <span class="message-time">@msg.CreatedAt.ToLocalTime().ToString("HH:mm")</span>
+                                </div>
+                                <div class="message-text">@msg.Text</div>
+                                <div class="message-footer">
+                                    <span class="message-model" id="messageModelTag">Creative Writer</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
         </div>
-    </main>
 
-    <form method="post" class="chat-form" onsubmit="return submitForm(this);">
-        <div class="input-container">
-            <label class="visually-hidden" for="UserInput">Your message</label>
-            <input type="text"
-                   id="UserInput"
-                   name="UserInput"
-                   class="chat-input"
-                   autocomplete="off"
-                   placeholder="Type your message here..."
-                   required />
-            <button type="submit" class="chat-send">
-                <span class="send-icon">🚀</span>
-                Send
+       
+        <div class="ai-typing-indicator" id="typingIndicator" style="display: none;">
+            <div class="typing-avatar">
+                <div class="avatar-bot">
+                    <i class="fas fa-robot"></i>
+                </div>
+            </div>
+            <div class="typing-content">
+                <div class="typing-text">ИИ печатает ответ</div>
+                <div class="typing-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+
+        
+        <footer class="chat-footer">
+            <div class="input-container">
+               
+                <div class="quick-actions">
+                    <div class="model-switcher-compact">
+                        <button class="model-switch-btn" id="compactModelSwitch">
+                            <span id="compactModelIcon">📚</span>
+                            <span class="model-switch-text">Creative</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                </div>
+
+               
+                <form method="post" class="chat-form" id="chatForm">
+                    @Html.AntiForgeryToken()
+                    <div class="input-wrapper">
+                        <label class="visually-hidden" for="UserInput">Ваше сообщение</label>
+                        <input type="text"
+                               id="UserInput"
+                               name="UserInput"
+                               class="chat-input"
+                               autocomplete="off"
+                               placeholder="Введите ваш запрос..."
+                               required />
+                    </div>
+
+                    <button type="submit" class="chat-send-btn" id="sendButton">
+                        <span class="send-icon">
+                            <i class="fas fa-paper-plane"></i>
+                        </span>
+                        <span class="send-text">Отправить</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Статусная строка -->
+            <div class="status-bar">
+                <div class="status-left">
+                    <span class="status-item">
+                        <i class="fas fa-database"></i>
+                        Модель: <strong id="currentModelStatus">Creative Writer</strong>
+                    </span>
+                    <span class="status-item">
+                        <i class="fas fa-bolt"></i>
+                        Задержка: <strong>42ms</strong>
+                    </span>
+                </div>
+                <div class="status-right">
+                    <span class="status-item">
+                        <i class="fas fa-shield-alt"></i>
+                        Безопасность: <strong>активна</strong>
+                    </span>
+                </div>
+            </div>
+        </footer>
+    </main>
+</div>
+
+
+<div class="modal-overlay" id="modelModal" style="display: none;">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2>Выбор модели ИИ</h2>
+            <button class="modal-close" id="modalClose">
+                <i class="fas fa-times"></i>
             </button>
         </div>
-    </form>
+        <div class="modal-content">
+            <div class="models-grid">
+                <div class="model-card active" data-model="creative">
+                    <div class="model-card-header">
+                        <div class="model-icon creative">
+                            <i class="fas fa-feather-alt"></i>
+                        </div>
+                        <div class="model-badge">РЕКОМЕНДУЕМАЯ</div>
+                    </div>
+                    <h3 class="model-card-title">Creative Writer</h3>
+                    <p class="model-card-desc">Специализированная модель для креативного письма, литературных текстов и творческого контента</p>
+                    <div class="model-features">
+                        <span class="feature-tag">📝 Креативное письмо</span>
+                        <span class="feature-tag">🎭 Литература</span>
+                        <span class="feature-tag">✍️ Копирайтинг</span>
+                    </div>
+                </div>
+
+                <div class="model-card" data-model="math">
+                    <div class="model-card-header">
+                        <div class="model-icon math">
+                            <i class="fas fa-square-root-alt"></i>
+                        </div>
+                        <div class="model-badge new">НОВАЯ</div>
+                    </div>
+                    <h3 class="model-card-title">Math Genius</h3>
+                    <p class="model-card-desc">Продвинутая математическая модель для решения сложных задач и аналитических вычислений</p>
+                    <div class="model-features">
+                        <span class="feature-tag">🧮 Математика</span>
+                        <span class="feature-tag">📊 Анализ</span>
+                        <span class="feature-tag">🔢 Вычисления</span>
+                    </div>
+                </div>
+
+                <div class="model-card" data-model="code">
+                    <div class="model-card-header">
+                        <div class="model-icon code">
+                            <i class="fas fa-code"></i>
+                        </div>
+                    </div>
+                    <h3 class="model-card-title">Code Assistant</h3>
+                    <p class="model-card-desc">Помощник в программировании и разработке программного обеспечения</p>
+                    <div class="model-features">
+                        <span class="feature-tag">💻 Программирование</span>
+                        <span class="feature-tag">🐛 Отладка</span>
+                        <span class="feature-tag">⚡ Оптимизация</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-primary" id="confirmModelSwitch">Применить модель</button>
+        </div>
+    </div>
 </div>
 
 <style>
+    
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .ai-platform {
+        display: flex;
+        height: 100vh;
+        background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+        font-family: 'Inter', sans-serif;
+        overflow: hidden;
+        position: relative;
+    }
+
+    
+    .sidebar {
+        width: 280px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        flex-direction: column;
+        z-index: 10;
+    }
+
+    .sidebar-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .logo-animation {
+        position: relative;
+        width: 40px;
+        height: 40px;
+    }
+
+    .logo-orb {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 50%;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    .logo-text {
+        font-size: 1.25rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #fff, #a78bfa);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .sidebar-nav {
+        flex: 1;
+        padding: 1rem 0;
+    }
+
+    .nav-section {
+        margin-bottom: 2rem;
+    }
+
+    .nav-title {
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.5);
+        padding: 0 1.5rem;
+        margin-bottom: 0.75rem;
+        letter-spacing: 0.05em;
+    }
+
+    .nav-items {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1.5rem;
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+    }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(90deg, rgba(124, 58, 237, 0.2), transparent);
+            color: #fff;
+            border-right: 3px solid #7c3aed;
+        }
+
+    .nav-badge {
+        background: rgba(124, 58, 237, 0.3);
+        color: #a78bfa;
+        padding: 0.25rem 0.5rem;
+        border-radius: 6px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        margin-left: auto;
+    }
+
+    .sidebar-footer {
+        padding: 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .system-stats {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .stat-label {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.6);
+        min-width: 60px;
+    }
+
+    .stat-bar {
+        flex: 1;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+        overflow: hidden;
+    }
+
+    .stat-progress {
+        height: 100%;
+        background: linear-gradient(90deg, #10b981, #34d399);
+        border-radius: 2px;
+        transition: width 0.3s ease;
+    }
+
+    .stat-value {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.8);
+        min-width: 30px;
+        text-align: right;
+    }
+
+    /* Основной контент */
+    .main-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    
+    .chat-header {
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1rem 2rem;
+    }
+
+    .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .sidebar-toggle {
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.25rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .sidebar-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+    .model-info-panel {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .current-model-display {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .model-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        color: white;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .model-details {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .model-name {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: white;
+        margin: 0;
+    }
+
+    .model-specs {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    .spec-dot {
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+    }
+
+    .header-controls {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .control-group {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .control-btn {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.7);
+        padding: 0.5rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+    .system-status {
+        display: flex;
+        align-items: center;
+    }
+
+    .status-indicators {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .status-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+    }
+
+    .status-item.online .status-dot {
+        background: #10b981;
+        box-shadow: 0 0 10px #10b981;
+    }
+
+    .status-item.performance .status-dot {
+        background: #f59e0b;
+        box-shadow: 0 0 10px #f59e0b;
+    }
+
+    .model-loading-bar {
+        height: 3px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+        overflow: hidden;
+        margin-top: 1rem;
+        position: relative;
+        display: none;
+    }
+
+    .loading-progress {
+        height: 100%;
+        background: linear-gradient(90deg, #7c3aed, #a78bfa);
+        border-radius: 2px;
+        animation: loading 2s ease-in-out infinite;
+    }
+
+    .loading-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 0.7rem;
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Основная область сообщений */
+    .chat-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .messages {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .chat-empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: rgba(255, 255, 255, 0.7);
+        text-align: center;
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.7;
+    }
+
+    .chat-empty p {
+        margin: 0;
+        font-size: 1.1rem;
+    }
+
+    /* Стили сообщений */
+    .message {
+        display: flex;
+        gap: 1rem;
+        animation: messageAppear 0.3s ease;
+    }
+
+    .user-message {
+        justify-content: flex-end;
+    }
+
+    .message-avatar {
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
+    }
+
+    .avatar-bot, .avatar-user {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+    }
+
+    .avatar-bot {
+        background: linear-gradient(135deg, #7c3aed, #a78bfa);
+        color: white;
+    }
+
+    .avatar-user {
+        background: linear-gradient(135deg, #10b981, #34d399);
+        color: white;
+    }
+
+    .message-content {
+        max-width: 70%;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 1.25rem;
+        position: relative;
+    }
+
+    .user-message .message-content {
+        background: rgba(124, 58, 237, 0.1);
+        border-color: rgba(124, 58, 237, 0.2);
+    }
+
+    .message-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .message-sender {
+        font-weight: 600;
+        color: white;
+        font-size: 0.9rem;
+    }
+
+    .message-time {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.8rem;
+    }
+
+    .message-text {
+        color: rgba(255, 255, 255, 0.9);
+        line-height: 1.6;
+        white-space: pre-wrap;
+    }
+
+    .message-footer {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 0.75rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .message-model {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Индикатор набора */
+    .ai-typing-indicator {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1rem;
+        animation: typingAppear 0.3s ease;
+    }
+
+    .typing-avatar {
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
+    }
+
+    .typing-content {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 1rem 1.5rem;
+    }
+
+    .typing-text {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .typing-dots {
+        display: flex;
+        gap: 0.25rem;
+    }
+
+        .typing-dots span {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            animation: typing 1.4s ease-in-out infinite both;
+        }
+
+            .typing-dots span:nth-child(1) {
+                animation-delay: -0.32s;
+            }
+
+            .typing-dots span:nth-child(2) {
+                animation-delay: -0.16s;
+            }
+
+    /* Футер с вводом */
+    .chat-footer {
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(20px);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1.5rem 2rem;
+    }
+
+    .input-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .quick-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .model-switcher-compact {
+        margin-left: auto;
+    }
+
+    .model-switch-btn {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.8);
+        padding: 0.5rem 0.75rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+        .model-switch-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+    .model-switch-text {
+        font-weight: 500;
+    }
+
+    .chat-form {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .input-wrapper {
+        flex: 1;
+        position: relative;
+    }
+
+    .chat-input {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 1.25rem 1.5rem;
+        color: white;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: rgba(124, 58, 237, 0.5);
+            box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.1);
+        }
+
+        .chat-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+    .chat-send-btn {
+        background: linear-gradient(135deg, #7c3aed, #a78bfa);
+        border: none;
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+    }
+
+        .chat-send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4);
+        }
+
+    .send-icon {
+        font-size: 1.1em;
+    }
+
+    /* Статусная строка */
+    .status-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 0.8rem;
+    }
+
+    .status-left, .status-right {
+        display: flex;
+        gap: 1.5rem;
+    }
+
+    .status-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+        .status-item strong {
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 600;
+        }
+
+    /* Модальное окно */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+
+    .modal-container {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(30px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 24px;
+        width: 90%;
+        max-width: 1000px;
+        max-height: 90vh;
+        overflow: hidden;
+        animation: modalAppear 0.3s ease;
+    }
+
+    .modal-header {
+        padding: 2rem 2rem 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .modal-header h2 {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+    .modal-close {
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.25rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+    .modal-content {
+        padding: 2rem;
+        overflow-y: auto;
+    }
+
+    .models-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .model-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 1.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+        .model-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .model-card.active {
+            border-color: #7c3aed;
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+    .model-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+    }
+
+    .model-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+    }
+
+        .model-icon.creative {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .model-icon.math {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+
+        .model-icon.code {
+            background: linear-gradient(135deg, #10b981, #34d399);
+        }
+
+    .model-badge {
+        background: #7c3aed;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+
+        .model-badge.new {
+            background: #10b981;
+        }
+
+    .model-card-title {
+        color: white;
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+    }
+
+    .model-card-desc {
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.5;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .model-features {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .feature-tag {
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.8);
+        padding: 0.25rem 0.5rem;
+        border-radius: 8px;
+        font-size: 0.7rem;
+    }
+
+    .modal-footer {
+        padding: 1rem 2rem 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #7c3aed, #a78bfa);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4);
+        }
+
+    /* Анимации */
+    @@keyframes float {
+        0%, 100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    @@keyframes loading {
+        0% {
+            transform: translateX(-100%);
+        }
+
+        100% {
+            transform: translateX(100%);
+        }
+    }
+
+    @@keyframes messageAppear {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes typingAppear {
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    @@keyframes typing {
+        0%, 80%, 100% {
+            transform: scale(0);
+        }
+
+        40% {
+            transform: scale(1);
+        }
+    }
+
+    @@keyframes modalAppear {
+        from {
+            opacity: 0;
+            transform: scale(0.8) translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    /* Адаптивность */
+    @@media (max-width: 768px) {
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            transform: translateX(-100%);
+            z-index: 100;
+        }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+        .header-content {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .header-right {
+            width: 100%;
+        }
+
+        .header-controls {
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .message-content {
+            max-width: 85%;
+        }
+
+        .status-bar {
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: flex-start;
+        }
+
+        .status-left, .status-right {
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+    }
+
+    /* Утилитарные классы */
     .visually-hidden {
         position: absolute;
         width: 1px;
@@ -119,343 +1294,482 @@
         white-space: nowrap;
         border: 0;
     }
-
-    .header-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-    }
-
-    .header-left {
-        display: flex;
-        align-items: center;
-        gap: 2rem;
-    }
-
-    .header-title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin: 0;
-        color: #ffffff;
-        text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-    }
-
-    .brand-gradient {
-        background: linear-gradient(90deg, #ffffff, #e0e7ff);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-
-    .neon-accent {
-        color: #c4b5fd;
-        text-shadow: 0 0 15px rgba(196, 181, 253, 0.7);
-    }
-
-    .header-info {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .status-indicator {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: 0.875rem;
-        color: #c4b5fd;
-        font-weight: 500;
-    }
-
-    .pulse-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: #a78bfa;
-        animation: pulse 2s infinite;
-        box-shadow: 0 0 10px rgba(167, 139, 250, 0.5);
-    }
-
-    .input-container {
-        display: flex;
-        gap: 1rem;
-        width: 100%;
-    }
-
-    .user-message {
-        justify-content: flex-end;
-    }
-
-        .user-message .bubble {
-            background: rgba(124, 58, 237, 0.1);
-            border-color: rgba(124, 58, 237, 0.3);
-        }
-
-    .bot-message {
-        justify-content: flex-start;
-    }
-
-    .empty-icon {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-        opacity: 0.7;
-    }
-
-    .chat-empty p {
-        margin: 0;
-        font-size: 1.1rem;
-    }
-
-    .send-icon {
-        font-size: 1.1em;
-    }
-
-    .chat-header {
-        background: linear-gradient(135deg, #7c3aed, #6d28d9, #5b21b6) !important;
-        backdrop-filter: none !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
-        box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4) !important;
-    }
-
-    /* Model Selector Styles */
-    .model-selector {
-        position: relative;
-    }
-
-    .model-dropdown {
-        position: relative;
-    }
-
-    .model-dropdown-btn {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.5rem 1rem;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 12px;
-        color: white;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(10px);
-    }
-
-        .model-dropdown-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-    .current-model {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-weight: 500;
-    }
-
-    .model-icon {
-        font-size: 1.1em;
-    }
-
-    .dropdown-arrow {
-        font-size: 0.8em;
-        transition: transform 0.3s ease;
-    }
-
-    .model-dropdown-content {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        margin-top: 0.5rem;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        border-radius: 12px;
-        padding: 0.5rem;
-        min-width: 250px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(-10px);
-        transition: all 0.3s ease;
-        z-index: 1000;
-    }
-
-        .model-dropdown-content.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-    .model-option {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.75rem;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        color: #374151;
-    }
-
-        .model-option:hover {
-            background: rgba(124, 58, 237, 0.1);
-        }
-
-        .model-option.active {
-            background: rgba(124, 58, 237, 0.15);
-            border-left: 3px solid #7c3aed;
-        }
-
-    .model-info {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .model-name {
-        font-weight: 600;
-        font-size: 0.9rem;
-        color: #1f2937;
-    }
-
-    .model-desc {
-        font-size: 0.75rem;
-        color: #6b7280;
-        margin-top: 0.1rem;
-    }
-
-    @@keyframes pulse {
-        0%, 100% {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        50% {
-            opacity: 0.7;
-            transform: scale(1.1);
-        }
-    }
-
-    .header-title {
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    }
-
-    .status-indicator {
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    }
-
-    /* Анимация смены модели */
-    .model-switch-animation {
-        animation: modelSwitch 0.5s ease;
-    }
-
-    @@keyframes modelSwitch {
-        0% {
-            opacity: 0.5;
-            transform: translateY(-5px);
-        }
-
-        100% {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
 </style>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const dropdownBtn = document.getElementById('modelDropdownBtn');
-        const dropdown = document.getElementById('modelDropdown');
-        const currentModel = document.getElementById('currentModel');
-        const statusText = document.getElementById('statusText');
+    // Глобальные переменные
+    let currentModel = 'creative';
 
-        // Открытие/закрытие dropdown
-        dropdownBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            dropdown.classList.toggle('show');
-            dropdownBtn.querySelector('.dropdown-arrow').style.transform =
-                dropdown.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+    document.addEventListener('DOMContentLoaded', function() {
+        // Инициализация всех компонентов
+        initSidebar();
+        initModelSwitcher();
+        initChatInterface();
+        initQuickActions();
+        startSystemMetricsSimulation();
+        startSystemNotifications();
+
+        // Добавляем скрытое поле для модели в форму
+        addHiddenModelField();
+    });
+
+    function addHiddenModelField() {
+        const chatForm = document.getElementById('chatForm');
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'SelectedModel';
+        hiddenInput.id = 'selectedModel';
+        hiddenInput.value = currentModel;
+        chatForm.appendChild(hiddenInput);
+    }
+
+    function initSidebar() {
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.querySelector('.sidebar');
+        const navItems = document.querySelectorAll('.nav-item[data-model]');
+
+        sidebarToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('open');
         });
 
-        // Выбор модели
-        document.querySelectorAll('.model-option').forEach(option => {
-            option.addEventListener('click', function() {
-                const modelName = this.querySelector('.model-name').textContent;
-                const modelIcon = this.getAttribute('data-icon');
-                const modelDesc = this.querySelector('.model-desc').textContent;
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                // Убираем активный класс у всех элементов
+                navItems.forEach(nav => nav.classList.remove('active'));
+                // Добавляем активный класс текущему элементу
+                this.classList.add('active');
 
-                // Обновляем текущую модель
-                currentModel.innerHTML = `
-                    <span class="model-icon">${modelIcon}</span>
-                    ${modelName}
-                `;
+                const model = this.getAttribute('data-model');
+                switchModel(model);
+            });
+        });
+    }
 
-                // Обновляем статус
-                statusText.textContent = `${modelName} активен`;
+    function initModelSwitcher() {
+        const compactSwitch = document.getElementById('compactModelSwitch');
+        const modelModal = document.getElementById('modelModal');
+        const modalClose = document.getElementById('modalClose');
+        const confirmSwitch = document.getElementById('confirmModelSwitch');
+        const modelCards = document.querySelectorAll('.model-card');
 
-                // Анимация смены
-                currentModel.classList.add('model-switch-animation');
-                setTimeout(() => {
-                    currentModel.classList.remove('model-switch-animation');
-                }, 500);
+        compactSwitch.addEventListener('click', function() {
+            modelModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
 
-                // Закрываем dropdown
-                dropdown.classList.remove('show');
-                dropdownBtn.querySelector('.dropdown-arrow').style.transform = 'rotate(0deg)';
+        modalClose.addEventListener('click', closeModal);
+        confirmSwitch.addEventListener('click', closeModal);
 
-                // Показываем уведомление о смене модели
-                showModelSwitchNotification(modelName, modelDesc);
+        modelCards.forEach(card => {
+            card.addEventListener('click', function() {
+                modelCards.forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
             });
         });
 
-        // Закрытие dropdown при клике вне его
-        document.addEventListener('click', function() {
-            dropdown.classList.remove('show');
-            dropdownBtn.querySelector('.dropdown-arrow').style.transform = 'rotate(0deg)';
+        function closeModal() {
+            modelModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+
+            const activeCard = document.querySelector('.model-card.active');
+            if (activeCard) {
+                const model = activeCard.getAttribute('data-model');
+                switchModel(model);
+            }
+        }
+
+        // Закрытие модального окна при клике вне его
+        modelModal.addEventListener('click', function(e) {
+            if (e.target === modelModal) {
+                closeModal();
+            }
+        });
+    }
+
+    function switchModel(model) {
+        if (model === currentModel) return;
+
+        const loadingBar = document.getElementById('modelLoadingBar');
+        const modelName = document.getElementById('modelName');
+        const currentModelStatus = document.getElementById('currentModelStatus');
+        const modelAvatar = document.getElementById('modelAvatar');
+        const compactModelIcon = document.getElementById('compactModelIcon');
+        const compactModelText = document.querySelector('.model-switch-text');
+        const selectedModelInput = document.getElementById('selectedModel');
+
+        // Показываем индикатор загрузки
+        loadingBar.style.display = 'block';
+
+        // Симуляция загрузки модели
+        setTimeout(() => {
+            const modelData = getModelData(model);
+
+            // Обновляем интерфейс
+            modelName.textContent = modelData.name;
+            currentModelStatus.textContent = modelData.name;
+            modelAvatar.innerHTML = `<i class="${modelData.icon}"></i>`;
+            compactModelIcon.textContent = modelData.emoji;
+            compactModelText.textContent = modelData.shortName;
+            selectedModelInput.value = model;
+
+            // Скрываем индикатор загрузки
+            loadingBar.style.display = 'none';
+
+            // Показываем уведомление о смене модели
+            showNotification(`Модель изменена на: ${modelData.name}`, 'success');
+
+            // Обновляем системные показатели
+            updateSystemMetrics(model);
+
+            // Добавляем приветственное сообщение от новой модели
+            addModelWelcomeMessage(modelData);
+
+            // Обновляем текущую модель
+            currentModel = model;
+
+        }, 1500);
+    }
+
+    function addModelWelcomeMessage(modelData) {
+        const welcomeMessages = {
+            creative: "Привет! Я Creative Writer - твой помощник в мире творчества и литературы. Готов помочь с написанием текстов, рассказов, стихов и любого креативного контента! Какие идеи у тебя есть? ✍️",
+            math: "Здравствуйте! Я Math Genius, специалист по математике и анализу. Готов решать сложные задачи, объяснять концепции и помогать с вычислениями любой сложности! С какой математической проблемой столкнулись? 🧮",
+            code: "Всем привет! Я Code Assistant - ваш напарник в программировании. Помогу с кодом, отладкой, архитектурой и обучением любым языкам программирования! Над каким проектом работаете? 💻",
+            science: "Добро пожаловать! Я Science Pro, эксперт в научных дисциплинах. Готов помочь с исследованиями, анализом данных и объяснением сложных научных концепций! Какая тема вас интересует? 🔬",
+            business: "Приветствую! Я Business AI, ваш консультант по бизнесу и аналитике. Помогу с стратегией, маркетингом, анализом данных и бизнес-планированием! Какой бизнес-вопрос хотите обсудить? 📊"
+        };
+
+        const message = welcomeMessages[modelData.shortName.toLowerCase()] || "Привет! Я готов к работе. Чем могу помочь?";
+
+        // Создаем приветственное сообщение от бота
+        const welcomeMessage = createBotMessage(message, modelData.name);
+
+        // Добавляем сообщение в чат
+        addMessageToChat(welcomeMessage);
+    }
+
+    function createBotMessage(text, modelName) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message bot-message';
+        messageDiv.innerHTML = `
+            <div class="message-avatar">
+                <div class="avatar-bot">
+                    <i class="fas fa-robot"></i>
+                </div>
+            </div>
+            <div class="message-content">
+                <div class="message-header">
+                    <span class="message-sender">${modelName}</span>
+                    <span class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                </div>
+                <div class="message-text">${text}</div>
+                <div class="message-footer">
+                    <span class="message-model">${modelName}</span>
+                </div>
+            </div>
+        `;
+        return messageDiv;
+    }
+
+    function addMessageToChat(messageElement) {
+        const messagesList = document.getElementById('messagesList');
+        const emptyState = messagesList.querySelector('.chat-empty');
+
+        // Убираем пустое состояние если оно есть
+        if (emptyState) {
+            emptyState.remove();
+        }
+
+        messagesList.appendChild(messageElement);
+        scrollToBottom();
+
+        // Добавляем анимацию появления
+        messageElement.style.opacity = '0';
+        messageElement.style.transform = 'translateY(20px)';
+
+        setTimeout(() => {
+            messageElement.style.transition = 'all 0.3s ease';
+            messageElement.style.opacity = '1';
+            messageElement.style.transform = 'translateY(0)';
+        }, 10);
+    }
+
+    function scrollToBottom() {
+        const chatBody = document.getElementById('chatBody');
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function getModelData(model) {
+        const models = {
+            creative: {
+                name: 'Creative Writer',
+                shortName: 'Creative',
+                icon: 'fas fa-feather-alt',
+                emoji: '📚'
+            },
+            math: {
+                name: 'Math Genius',
+                shortName: 'Math',
+                icon: 'fas fa-square-root-alt',
+                emoji: '🧮'
+            },
+            code: {
+                name: 'Code Assistant',
+                shortName: 'Code',
+                icon: 'fas fa-code',
+                emoji: '💻'
+            },
+            science: {
+                name: 'Science Pro',
+                shortName: 'Science',
+                icon: 'fas fa-flask',
+                emoji: '🔬'
+            },
+            business: {
+                name: 'Business AI',
+                shortName: 'Business',
+                icon: 'fas fa-chart-line',
+                emoji: '📊'
+            }
+        };
+
+        return models[model] || models.creative;
+    }
+
+    function initChatInterface() {
+        const chatInput = document.getElementById('UserInput');
+        const sendButton = document.getElementById('sendButton');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const newChatBtn = document.getElementById('newChatBtn');
+
+        // Обработка отправки формы
+        const chatForm = document.getElementById('chatForm');
+        chatForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            sendMessage();
         });
 
-        function showModelSwitchNotification(modelName, modelDesc) {
-            // Создаем уведомление
-            const notification = document.createElement('div');
-            notification.className = 'model-notification';
-            notification.innerHTML = `
-                <div class="notification-content">
-                    <span class="notification-icon">✅</span>
-                    <div class="notification-text">
-                        <strong>Модель изменена</strong>
-                        <span>Теперь используется: ${modelName}</span>
+        // Кнопка нового чата
+        newChatBtn.addEventListener('click', function() {
+            if (confirm('Очистить историю чата?')) {
+                const messagesList = document.getElementById('messagesList');
+                messagesList.innerHTML = '<div class="chat-empty"><div class="empty-icon">💬</div><p>No messages yet. Start a conversation with AI! 👋</p></div>';
+                showNotification('Чат очищен', 'success');
+            }
+        });
+
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            // Создаем и добавляем сообщение пользователя
+            const userMessage = createUserMessage(message);
+            addMessageToChat(userMessage);
+
+            // Очищаем поле ввода
+            chatInput.value = '';
+
+            // Показываем индикатор набора
+            typingIndicator.style.display = 'flex';
+            scrollToBottom();
+
+            // Симуляция ответа ИИ
+            setTimeout(() => {
+                typingIndicator.style.display = 'none';
+
+                // Создаем ответ от ИИ
+                const aiResponse = simulateAIResponse(message);
+                const botMessage = createBotMessage(aiResponse, getModelData(currentModel).name);
+                addMessageToChat(botMessage);
+
+            }, 2000);
+        }
+
+        function createUserMessage(text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user-message';
+            messageDiv.innerHTML = `
+                <div class="message-content">
+                    <div class="message-header">
+                        <span class="message-sender">Вы</span>
+                        <span class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                    </div>
+                    <div class="message-text">${text}</div>
+                </div>
+                <div class="message-avatar">
+                    <div class="avatar-user">
+                        <i class="fas fa-user"></i>
                     </div>
                 </div>
             `;
+            return messageDiv;
+        }
+    }
 
-            // Стили для уведомления
-            notification.style.cssText = `
-                position: fixed;
-                top: 100px;
-                right: 20px;
-                background: rgba(255, 255, 255, 0.95);
-                backdrop-filter: blur(20px);
-                border: 1px solid rgba(255, 255, 255, 0.3);
-                border-radius: 12px;
-                padding: 1rem;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-                z-index: 10000;
-                transform: translateX(400px);
-                opacity: 0;
-                transition: all 0.5s ease;
-                min-width: 300px;
-            `;
+    function simulateAIResponse(message) {
+        const responses = {
+            creative: [
+                "Как писатель с многолетним опытом, я вижу в вашем запросе прекрасную возможность для творческого развития. Позвольте мне предложить несколько идей для развития этой темы...",
+                "О, это интересная тема для литературного произведения! Я могу помочь вам развить сюжет, создать персонажей или написать целый рассказ на основе вашей идеи.",
+                "С точки зрения стилистики и композиции, ваш запрос открывает множество возможностей для креативной реализации. Давайте поработаем над этим вместе!"
+            ],
+            math: [
+                "Проанализировав вашу задачу с математической точки зрения, я пришел к следующим выводам. Решение требует применения методов математического анализа и тщательного рассмотрения всех переменных.",
+                "Используя методы математического анализа, мы можем решить эту задачу следующим образом. Рассмотрим сначала основные принципы, а затем перейдем к конкретным вычислениям.",
+                "Рассмотрим вашу проблему через призму математической логики и получим оптимальное решение. Для начала определим ключевые переменные и условия задачи."
+            ],
+            code: [
+                "С точки зрения архитектуры программного обеспечения, ваш код можно оптимизировать следующим образом. Рекомендую использовать более эффективные алгоритмы и улучшить структуру данных.",
+                "Проанализировав ваш запрос, я предлагаю следующее решение. Этот подход обеспечит лучшую производительность и поддерживаемость кода в долгосрочной перспективе.",
+                "Для реализации этой функциональности рекомендую использовать следующий алгоритм. Он обеспечивает оптимальную временную сложность и хорошо масштабируется."
+            ],
+            science: [
+                "С научной точки зрения, ваш вопрос затрагивает интересные аспекты. Исходя из последних исследований в этой области, можно сделать следующие выводы...",
+                "Проанализировав доступные научные данные, я могу сказать, что этот феномен объясняется следующими принципами. Давайте рассмотрим их подробнее.",
+                "Основываясь на научном методе, мы можем подойти к решению этой проблемы систематически. Рассмотрим гипотезы, методы исследования и возможные выводы."
+            ],
+            business: [
+                "С точки зрения бизнес-аналитики, ваша идея имеет хороший потенциал. Проведя SWOT-анализ, мы видим следующие возможности для развития и возможные риски.",
+                "Для успешной реализации этого бизнес-проекта рекомендую рассмотреть следующие стратегические подходы. Они помогут максимизировать ROI и минимизировать риски.",
+                "Проанализировав рыночные тенденции, я могу предложить следующие рекомендации для вашего бизнеса. Они основаны на актуальных данных и лучших практиках."
+            ]
+        };
 
-            document.body.appendChild(notification);
+        const modelResponses = responses[currentModel] || responses.creative;
+        return modelResponses[Math.floor(Math.random() * modelResponses.length)];
+    }
 
-            // Анимация появления
+    function initQuickActions() {
+        // Дополнительные быстрые действия можно добавить здесь
+    }
+
+    function startSystemMetricsSimulation() {
+        setInterval(() => {
+            // Обновляем случайные системные показатели
+            const stats = document.querySelectorAll('.stat-progress');
+            stats.forEach(stat => {
+                const newWidth = Math.random() * 80 + 10;
+                stat.style.width = newWidth + '%';
+                stat.nextElementSibling.textContent = Math.round(newWidth) + '%';
+            });
+        }, 5000);
+    }
+
+    function updateSystemMetrics(model) {
+        // Обновляем показатели в зависимости от выбранной модели
+        const metrics = {
+            creative: { cpu: 23, memory: 67, network: 12 },
+            math: { cpu: 45, memory: 78, network: 8 },
+            code: { cpu: 32, memory: 71, network: 15 },
+            science: { cpu: 58, memory: 82, network: 6 },
+            business: { cpu: 28, memory: 65, network: 18 }
+        };
+
+        const modelMetrics = metrics[model] || metrics.creative;
+
+        // Анимированное обновление показателей
+        animateMetric('cpu', modelMetrics.cpu);
+        animateMetric('memory', modelMetrics.memory);
+        animateMetric('network', modelMetrics.network);
+    }
+
+    function animateMetric(type, targetValue) {
+        const elements = {
+            cpu: document.querySelectorAll('.stat-progress')[0],
+            memory: document.querySelectorAll('.stat-progress')[1],
+            network: document.querySelectorAll('.stat-progress')[2]
+        };
+
+        const element = elements[type];
+        if (!element) return;
+
+        let currentValue = parseInt(element.style.width) || 0;
+        const step = (targetValue - currentValue) / 30;
+
+        const interval = setInterval(() => {
+            currentValue += step;
+
+            if ((step > 0 && currentValue >= targetValue) || (step < 0 && currentValue <= targetValue)) {
+                currentValue = targetValue;
+                clearInterval(interval);
+            }
+
+            element.style.width = currentValue + '%';
+            element.nextElementSibling.textContent = Math.round(currentValue) + '%';
+        }, 50);
+    }
+
+    function startSystemNotifications() {
+        const notifications = [
+            "Система оптимизирована для работы с большими моделями",
+            "Кэш нейросети очищен и перезагружен",
+            "Обновлены веса модели для повышения точности",
+            "Проведена калибровка параметров генерации"
+        ];
+
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                const randomNotification = notifications[Math.floor(Math.random() * notifications.length)];
+                showNotification(randomNotification, 'info');
+            }
+        }, 30000);
+    }
+
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `system-notification ${type}`;
+        notification.innerHTML = `
+            <div class="notification-icon">
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
+            </div>
+            <div class="notification-content">
+                <div class="notification-message">${message}</div>
+            </div>
+            <button class="notification-close">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 300px;
+            z-index: 10000;
+            transform: translateX(400px);
+            opacity: 0;
+            transition: all 0.5s ease;
+        `;
+
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.style.transform = 'translateX(0)';
+            notification.style.opacity = '1';
+        }, 100);
+
+        const closeBtn = notification.querySelector('.notification-close');
+        closeBtn.addEventListener('click', () => {
+            notification.style.transform = 'translateX(400px)';
+            notification.style.opacity = '0';
             setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-                notification.style.opacity = '1';
-            }, 100);
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 500);
+        });
 
-            // Автоматическое скрытие через 3 секунды
-            setTimeout(() => {
+        setTimeout(() => {
+            if (notification.parentNode) {
                 notification.style.transform = 'translateX(400px)';
                 notification.style.opacity = '0';
                 setTimeout(() => {
@@ -463,33 +1777,14 @@
                         notification.parentNode.removeChild(notification);
                     }
                 }, 500);
-            }, 3000);
-        }
-
-        // Добавляем скрытое поле для "модели" в форму (для видимости)
-        const chatForm = document.querySelector('.chat-form');
-        const hiddenModelInput = document.createElement('input');
-        hiddenModelInput.type = 'hidden';
-        hiddenModelInput.name = 'SelectedModel';
-        hiddenModelInput.id = 'selectedModel';
-        hiddenModelInput.value = 'creative';
-        chatForm.appendChild(hiddenModelInput);
-
-        // Обновляем скрытое поле при смене модели
-        document.querySelectorAll('.model-option').forEach(option => {
-            option.addEventListener('click', function() {
-                const model = this.getAttribute('data-model');
-                document.getElementById('selectedModel').value = model;
-            });
-        });
-    });
-
-    function submitForm(form) {
-        // Можно добавить логику для разных "моделей" если нужно
-        const selectedModel = document.getElementById('selectedModel').value;
-        console.log('Using model:', selectedModel);
-
-        // Продолжаем стандартную отправку формы
-        return true;
+            }
+        }, 5000);
     }
+
+    // Глобальные функции
+    window.submitForm = function(form) {
+        const selectedModel = document.getElementById('selectedModel').value;
+        console.log('Отправка запроса модели:', selectedModel);
+        return true;
+    };
 </script>

@@ -16,10 +16,9 @@ namespace Dialogix.Services
             _httpClient = httpClient;
 
             var apiKey = configuration["HuggingFace:ApiKey"];
-            if (string.IsNullOrWhiteSpace(apiKey))
-                throw new ArgumentException("HuggingFace API key not found in configuration!");
+        
 
-            Console.WriteLine($"Using HuggingFace API key: {apiKey.Substring(0, 8)}...");
+        
 
             _httpClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", apiKey);

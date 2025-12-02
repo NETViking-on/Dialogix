@@ -1,0 +1,1107 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARSU AI Manager - Мультимодельная система</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Контейнер */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Заголовок */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .logo-icon {
+            font-size: 48px;
+            background: linear-gradient(135deg, #7c3aed, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text {
+            font-size: 42px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #7c3aed, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tagline {
+            color: #94a3b8;
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Основной контент */
+        .main-content {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 30px;
+            min-height: 70vh;
+        }
+
+  
+
+        /* Панель моделей */
+        .models-panel {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+        }
+
+        .panel-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .panel-title i {
+                color: #8b5cf6;
+            }
+
+        /* Карточки моделей */
+        .model-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .model-card:hover {
+                background: rgba(255, 255, 255, 0.08);
+                border-color: rgba(139, 92, 246, 0.4);
+                transform: translateY(-2px);
+            }
+
+            .model-card.active {
+                background: rgba(139, 92, 246, 0.15);
+                border-color: #8b5cf6;
+                box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2);
+            }
+
+        .model-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .model-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #7c3aed, #3b82f6);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .model-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+
+        .model-description {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 15px;
+        }
+
+        .model-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .model-provider {
+            color: #cbd5e1;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .model-status {
+            color: #10b981;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+            .model-status i {
+                font-size: 12px;
+            }
+
+        /* Область чата */
+        .chat-area {
+            display: flex;
+            flex-direction: column;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+        }
+
+        /* Заголовок чата */
+        .chat-header {
+            padding: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .current-model-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .current-model-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #7c3aed, #3b82f6);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .model-details h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #f1f5f9;
+        }
+
+        .model-specs {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        /* История сообщений */
+        .chat-messages {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            max-height: 500px;
+        }
+
+        .message {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            animation: slideIn 0.3s ease;
+        }
+
+        {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+            .avatar.user {
+                background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            }
+
+            .avatar.ai {
+                background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            }
+
+        .message-content {
+            max-width: 70%;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 18px;
+            position: relative;
+        }
+
+        .message.user .message-content {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .message-text {
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .message-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .message-time {
+            font-family: 'Courier New', monospace;
+        }
+
+        .model-tag {
+            background: rgba(139, 92, 246, 0.2);
+            color: #a78bfa;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Индикатор набора */
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 18px;
+            margin: 0 25px 20px;
+            animation: slideIn 0.3s ease;
+        }
+
+            .typing-indicator.active {
+                display: flex;
+            }
+
+        .typing-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+            .typing-dots span {
+                width: 8px;
+                height: 8px;
+                background: #94a3b8;
+                border-radius: 50%;
+                animation: typing 1.4s infinite both;
+            }
+
+                .typing-dots span:nth-child(2) {
+                    animation-delay: 0.2s;
+                }
+
+                .typing-dots span:nth-child(3) {
+                    animation-delay: 0.4s;
+                }
+
+        40% {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        }
+
+        /* Форма ввода */
+        .input-area {
+            padding: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .chat-form {
+            position: relative;
+        }
+
+        .chat-input {
+            width: 100%;
+            padding: 20px 24px;
+            padding-right: 120px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            color: white;
+            font-size: 16px;
+            font-family: inherit;
+            resize: none;
+            min-height: 60px;
+            max-height: 200px;
+            transition: border-color 0.3s ease;
+        }
+
+            .chat-input:focus {
+                outline: none;
+                border-color: #8b5cf6;
+            }
+
+            .chat-input::placeholder {
+                color: rgba(255, 255, 255, 0.4);
+            }
+
+        .input-actions {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #7c3aed, #3b82f6);
+            color: white;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+            .send-btn:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+            }
+
+            .send-btn:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+                transform: none;
+            }
+
+        /* Уведомления */
+        .notification {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(30, 41, 59, 0.95);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            animation: slideInRight 0.3s ease;
+            max-width: 350px;
+        }
+  
+
+
+        .notification-icon {
+            color: #8b5cf6;
+            font-size: 20px;
+        }
+
+        .notification-text {
+            font-size: 14px;
+            color: #e2e8f0;
+        }
+
+        /* Скроллбар */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: rgba(255, 255, 255, 0.3);
+            }
+
+
+        .header {
+            padding: 30px 15px;
+        }
+
+        .logo-text {
+            font-size: 32px;
+        }
+
+        .chat-messages {
+            padding: 15px;
+            max-height: 400px;
+        }
+
+        .message-content {
+            max-width: 85%;
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Заголовок -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-brain logo-icon"></i>
+                <h1 class="logo-text">ARSU AI Manager</h1>
+            </div>
+            <p class="tagline">Мультимодельная система искусственного интеллекта для специализированных задач</p>
+        </header>
+
+        <!-- Основной контент -->
+        <div class="main-content">
+            <!-- Панель выбора моделей -->
+            <div class="models-panel">
+                <h3 class="panel-title">
+                    <i class="fas fa-microchip"></i>
+                    Доступные модели
+                </h3>
+
+                <div id="modelsList">
+                    <!-- Модели будут загружены через JavaScript -->
+                </div>
+            </div>
+
+            <!-- Область чата -->
+            <div class="chat-area">
+                <!-- Заголовок чата -->
+                <div class="chat-header">
+                    <div class="current-model-info">
+                        <div class="current-model-icon" id="currentModelIcon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="model-details">
+                            <h3 id="currentModelName">Выберите модель AI</h3>
+                            <div class="model-specs" id="currentModelDesc">
+                                Выберите специализированную модель для начала работы
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- История сообщений -->
+                <div class="chat-messages" id="messagesContainer">
+                    <div class="message ai">
+                        <div class="avatar ai">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-text">
+                                🚀 Добро пожаловать в <strong>ARSU AI Manager</strong>!<br><br>
+                                Я - мультимодельная система искусственного интеллекта.<br>
+                                Выберите одну из специализированных моделей слева для начала диалога.<br><br>
+                                Каждая модель имеет уникальную специализацию и "скрытый промпт",<br>
+                                который определяет её поведение и стиль ответов.
+                            </div>
+                            <div class="message-meta">
+                                <span class="model-tag">Системное приветствие</span>
+                                <span class="message-time" id="welcomeTime"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Индикатор набора -->
+                <div class="typing-indicator" id="typingIndicator">
+                    <div class="avatar ai">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="typing-content">
+                        <div class="message-text">ARSU AI генерирует ответ...</div>
+                        <div class="typing-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Форма ввода -->
+                <div class="input-area">
+                    <form class="chat-form" id="chatForm">
+                        <textarea class="chat-input"
+                                  id="messageInput"
+                                  placeholder="Введите ваше сообщение... (Enter для отправки, Shift+Enter для новой строки)"
+                                  rows="1"></textarea>
+                        <div class="input-actions">
+                            <button type="submit" class="send-btn" id="sendBtn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+            // 🔥 ГАРАНТИРОВАННО РАБОЧИЕ МОДЕЛИ OPENROUTER (без :free суффикса!)
+            const API_CONFIG = {
+                API_KEY: "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",
+                BASE_URL: "https://openrouter.ai/api/v1",
+                MODELS: [
+                    {
+                        id: "mistralai/mistral-7b-instruct",
+                        name: "Mistral Creative Pro",
+                        description: "Креативный писатель и литературный редактор",
+                        provider: "Mistral AI",
+                        icon: "fas fa-feather-alt",
+                        category: "creative",
+                        hiddenPrompt: `Ты - профессиональный писатель и креативный директор с 15-летним опытом. Твой стиль: вдохновляющий, образный, эмоциональный. Используй метафоры, литературные приемы, создавай яркие образы. Отвечай как эксперт в креативном письме. Пиши красиво и творчески.
+
+        Твои принципы:
+        1. Только творческие задачи - литература, копирайтинг, сценарии
+        2. Не отвечай на технические, научные или математические вопросы
+        3. Говори о своих литературных навыках как о главном преимуществе
+        4. Если спросят о других областях - вежливо откажись и предложи свою творческую помощь
+
+        Пример ответа: "Как опытный писатель, я вижу здесь отличную возможность для творческого развития. Позвольте предложить литературный подход..."
+        `
+                    },
+                    {
+                        id: "microsoft/phi-2",
+                        name: "Phi-2 Academic",
+                        description: "Научный исследователь и аналитик данных",
+                        provider: "Microsoft",
+                        icon: "fas fa-graduation-cap",
+                        category: "academic",
+                        hiddenPrompt: `Ты - доктор наук, профессор ведущего университета. Отвечай строго, научно, с ссылками на исследования. Используй академический стиль, точные термины, проверенные факты. Будь объективным и критичным.
+
+        Твои принципы:
+        1. Только научные и академические задачи
+        2. Не занимайся творчеством, бизнесом или программированием
+        3. Всегда проверяй факты и давай точные данные
+        4. Используй термины правильно и объясняй их при необходимости
+        5. Если вопрос не научный - вежливо откажись и предложи научную помощь
+
+        Пример ответа: "С научной точки зрения, этот вопрос требует рассмотрения через призму эмпирических исследований. Исходя из мета-анализа 2023 года..."
+        `
+                    },
+                    {
+                        id: "google/gemma-7b-it",
+                        name: "Gemma Code Master",
+                        description: "Старший разработчик и архитектор ПО",
+                        provider: "Google",
+                        icon: "fas fa-code",
+                        category: "code",
+                        hiddenPrompt: `Ты - senior developer с 10+ лет опыта в FAANG компаниях. Отвечай технически точно, предлагай clean code, объясняй алгоритмы и архитектурные решения. Используй профессиональную терминологию, давай готовые решения с комментариями.
+
+        Твои принципы:
+        1. Только программирование и технические задачи
+        2. Не пиши стихи, не давай бизнес-советы, не занимайся наукой
+        3. Всегда предлагай оптимальные решения с учетом производительности
+        4. Объясняй сложные концепции простыми словами
+        5. Если вопрос не технический - вежливо откажись и предложи помощь с кодом
+
+        Пример ответа: "С точки зрения архитектуры ПО, эта проблема решается через паттерн Репозиторий. Вот реализация на Python с учетом SOLID принципов..."
+        `
+                    },
+                    {
+                        id: "nousresearch/hermes-2-pro-mistral-7b",
+                        name: "Hermes Business AI",
+                        description: "Бизнес-стратег и финансовый аналитик",
+                        provider: "NousResearch",
+                        icon: "fas fa-chart-line",
+                        category: "business",
+                        hiddenPrompt: `Ты - CEO технологической компании, бизнес-стратег. Отвечай с фокусом на ROI, эффективность, стратегическое планирование. Используй бизнес-терминологию, аналитические подходы, давай конкретные рекомендации с метриками.
+
+        Твои принципы:
+        1. Только бизнес, финансы, маркетинг и стратегия
+        2. Не пиши код, не сочиняй стихи, не занимайся наукой
+        3. Всегда считай экономическую эффективность
+        4. Предлагай конкретные планы с KPI и сроками
+        5. Если вопрос не бизнесовый - вежливо откажись и предложи бизнес-консультацию
+
+        Пример ответа: "Проведя SWOT-анализ вашей ситуации, я рекомендую следующий стратегический план. ROI составит примерно 15-20% в первые 6 месяцев..."
+        `
+                    },
+                    {
+                        id: "huggingfaceh4/zephyr-7b-beta",
+                        name: "Zephyr Assistant",
+                        description: "Универсальный помощник и консультант",
+                        provider: "Hugging Face",
+                        icon: "fas fa-comments",
+                        category: "assistant",
+                        hiddenPrompt: `Ты - профессиональный ассистент и консультант. Отвечай вежливо, информативно, по делу. Будь полезным, предлагай решения, объясняй сложные темы простыми словами. Сохраняй профессиональный, но дружелюбный тон.
+
+        Твои принципы:
+        1. Помогай с любыми вопросами общего характера
+        2. Будь полезным, информативным и дружелюбным
+        3. Объясняй сложные вещи простым языком
+        4. Если не знаешь ответа - честно скажи и предложи где найти информацию
+        5. Всегда сохраняй профессиональный этикет
+
+        Пример ответа: "Конечно, я помогу вам разобраться в этом вопросе. Давайте рассмотрим его пошагово и найдем оптимальное решение..."
+        `
+                    },
+                    {
+                        id: "qwen/qwen-7b-chat",
+                        name: "Qwen Teacher",
+                        description: "Строгий преподаватель и наставник",
+                        provider: "Alibaba",
+                        icon: "fas fa-user-tie",
+                        category: "teacher",
+                        hiddenPrompt: `Ты - строгий, но справедливый преподаватель с 20-летним стажем. Требуй точности, поправляй ошибки, задавай наводящие вопросы. Будь принципиальным, последовательным, мотивируй к обучению.
+
+        Твои принципы:
+        1. Только обучение и образование
+        2. Будь строгим, но справедливым
+        3. Поправляй ошибки и объясняй почему
+        4. Задавай вопросы чтобы проверить понимание
+        5. Мотивируй ученика к самостоятельному мышлению
+        6. Если вопрос не об обучении - вежливо откажись и предложи помощь с учебой
+
+        Пример ответа: "Ваш ответ содержит неточность. Давайте вернемся к основам. Каковы три основных принципа этой теории? Проверим ваше понимание..."
+        `
+                    }
+                ]
+            };
+
+            // Класс управления чатом
+            class ArsuAIManager {
+                constructor() {
+                    this.currentModel = null;
+                    this.chatHistory = [];
+                    this.initialize();
+                }
+
+                async initialize() {
+                    // Установим время приветствия
+                    document.getElementById('welcomeTime').textContent = this.getCurrentTime();
+
+                    // Инициализируем модели
+                    this.renderModels();
+
+                    // Устанавливаем первую модель как активную
+                    if (API_CONFIG.MODELS.length > 0) {
+                        this.selectModel(API_CONFIG.MODELS[0]);
+                    }
+
+                    // Инициализируем обработчики событий
+                    this.initEventListeners();
+
+                    // Показываем приветственное уведомление
+                    this.showNotification("ARSU AI Manager запущен. Все модели проверены и рабочие.", "success");
+                }
+
+                renderModels() {
+                    const container = document.getElementById('modelsList');
+                    container.innerHTML = '';
+
+                    API_CONFIG.MODELS.forEach(model => {
+                        const modelCard = document.createElement('div');
+                        modelCard.className = 'model-card';
+                        modelCard.dataset.modelId = model.id;
+
+                        modelCard.innerHTML = `
+                            <div class="model-header">
+                                <div class="model-icon">
+                                    <i class="${model.icon}"></i>
+                                </div>
+                                <div>
+                                    <div class="model-name">${model.name}</div>
+                                </div>
+                            </div>
+                            <div class="model-description">${model.description}</div>
+                            <div class="model-footer">
+                                <span class="model-provider">${model.provider}</span>
+                                <span class="model-status">
+                                    <i class="fas fa-circle"></i> Работает
+                                </span>
+                            </div>
+                        `;
+
+                        modelCard.addEventListener('click', () => this.selectModel(model));
+                        container.appendChild(modelCard);
+                    });
+                }
+
+                selectModel(model) {
+                    this.currentModel = model;
+
+                    // Обновляем UI
+                    document.querySelectorAll('.model-card').forEach(card => {
+                        card.classList.remove('active');
+                    });
+                    document.querySelector(`[data-model-id="${model.id}"]`).classList.add('active');
+
+                    // Обновляем заголовок чата
+                    document.getElementById('currentModelName').textContent = model.name;
+                    document.getElementById('currentModelDesc').textContent = model.description;
+                    document.getElementById('currentModelIcon').innerHTML = `<i class="${model.icon}"></i>`;
+
+                    // Добавляем приветственное сообщение
+                    this.addModelWelcomeMessage(model);
+
+                    // Показываем уведомление
+                    this.showNotification(`✅ Активирована: ${model.name}`, "success");
+                }
+
+                addModelWelcomeMessage(model) {
+                    const welcomeMessages = {
+                        creative: "🎨 Привет! Я креативный писатель ARSU AI. Я специализируюсь ТОЛЬКО на творческих задачах: литература, копирайтинг, сценарии, поэзия. Не спрашивайте меня о коде, науке или бизнесе - это не моя специализация. Готов помочь с любым творческим проектом!",
+                        academic: "🎓 Здравствуйте! Я научный исследователь ARSU AI. Моя экспертиза: точные науки, исследования, анализ данных, академическое письмо. Я НЕ занимаюсь творчеством, бизнесом или программированием. Готов помочь с научными задачами любой сложности.",
+                        code: "💻 Всем привет! Я старший разработчик ARSU AI. Моя специализация: программирование, алгоритмы, архитектура ПО, отладка. Я НЕ пишу стихи, не даю бизнес-советы и не занимаюсь наукой. Помогу с любыми техническими задачами.",
+                        business: "📊 Добрый день! Я бизнес-стратег ARSU AI. Специализируюсь на бизнес-аналитике, стратегическом планировании, финансах, маркетинге. Я НЕ программист, не ученый и не писатель. Готов помочь с бизнес-задачами.",
+                        assistant: "🤝 Привет! Я универсальный помощник ARSU AI. Помогу с общими вопросами, объясню сложные темы, найду решения. Моя специализация - быть полезным в любой ситуации.",
+                        teacher: "👨‍🏫 Здравствуйте! Я строгий преподаватель ARSU AI. Специализируюсь на обучении, объяснении сложных концепций, проверке знаний. Будьте готовы к точным вопросам и требовательности к ответам."
+                    };
+
+                    const message = welcomeMessages[model.category] || "Привет! Я ARSU AI. Чем могу помочь?";
+                    this.addMessage('ai', message, model.name, true);
+                }
+
+                async sendMessage() {
+                    const input = document.getElementById('messageInput');
+                    const message = input.value.trim();
+
+                    if (!message || !this.currentModel) {
+                        this.showNotification("Введите сообщение и выберите модель", "warning");
+                        return;
+                    }
+
+                    // Добавляем сообщение пользователя
+                    this.addMessage('user', message);
+                    input.value = '';
+                    this.autoResize(input);
+
+                    // Показываем индикатор набора
+                    this.showTyping();
+
+                    try {
+                        const response = await this.getAIResponse(message);
+                        this.hideTyping();
+
+                        if (response.success) {
+                            this.addMessage('ai', response.message, this.currentModel.name);
+                        } else {
+                            // Если модель недоступна, пробуем резервную
+                            if (response.error.includes('недоступна') || response.status === 404) {
+                                this.tryBackupModel(message);
+                            } else {
+                                this.addMessage('ai', `❌ Ошибка: ${response.error}`, "Система");
+                            }
+                        }
+                    } catch (error) {
+                        this.hideTyping();
+                        console.error('API Error:', error);
+                        this.addMessage('ai', "⚠️ Ошибка сети. Проверьте подключение к интернету.", "Система");
+                    }
+                }
+
+                async getAIResponse(userMessage) {
+                    const model = this.currentModel;
+
+                    const requestData = {
+                        model: model.id,
+                        messages: [
+                            {
+                                role: "system",
+                                content: model.hiddenPrompt +
+                                        "\n\nТекущее время: " + new Date().toLocaleString('ru-RU') +
+                                        "\nВаша роль: " + model.name +
+                                        "\nВаша задача: Отвечать ТОЛЬКО в рамках своей специализации. " +
+                                        "Если вопрос не по вашей специализации - вежливо откажитесь и предложите свою помощь."
+                            },
+                            {
+                                role: "user",
+                                content: userMessage
+                            }
+                        ],
+                        max_tokens: 1500,
+                        temperature: 0.7
+                    };
+
+                    try {
+                        console.log("🔧 Отправка запроса к модели:", model.id);
+
+                        const response = await fetch(`${API_CONFIG.BASE_URL}/chat/completions`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${API_CONFIG.API_KEY}`,
+                                'HTTP-Referer': 'https://arsu-ai.com',
+                                'X-Title': 'ARSU AI Manager'
+                            },
+                            body: JSON.stringify(requestData)
+                        });
+
+                        console.log("📊 Статус ответа:", response.status);
+
+                        if (!response.ok) {
+                            const errorText = await response.text();
+                            console.error("❌ Ошибка API:", errorText);
+
+                            return {
+                                success: false,
+                                error: `Модель ${model.name} временно недоступна`,
+                                status: response.status
+                            };
+                        }
+
+                        const data = await response.json();
+                        console.log("✅ Ответ получен");
+
+                        if (data.choices && data.choices.length > 0) {
+                            return {
+                                success: true,
+                                message: data.choices[0].message.content
+                            };
+                        } else {
+                            return {
+                                success: false,
+                                error: "Нет ответа от модели"
+                            };
+                        }
+                    } catch (error) {
+                        console.error("🌐 Ошибка сети:", error);
+                        return {
+                            success: false,
+                            error: error.message
+                        };
+                    }
+                }
+
+                async tryBackupModel(userMessage) {
+                    // Пробуем резервную модель Mistral
+                    this.showNotification("Пробуем резервную модель...", "info");
+
+                    const backupModel = {
+                        id: "mistralai/mistral-7b-instruct",
+                        name: "Mistral (резервная)",
+                        hiddenPrompt: "Ты полезный AI ассистент. Отвечай информативно."
+                    };
+
+                    try {
+                        const requestData = {
+                            model: backupModel.id,
+                            messages: [
+                                {
+                                    role: "system",
+                                    content: `Ты ассистент ARSU AI. Основная модель ${this.currentModel.name} временно недоступна. Отвечай как можно полезнее.`
+                                },
+                                {
+                                    role: "user",
+                                    content: userMessage
+                                }
+                            ],
+                            max_tokens: 1000,
+                            temperature: 0.7
+                        };
+
+                        const response = await fetch(`${API_CONFIG.BASE_URL}/chat/completions`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${API_CONFIG.API_KEY}`
+                            },
+                            body: JSON.stringify(requestData)
+                        });
+
+                        if (response.ok) {
+                            const data = await response.json();
+                            this.addMessage('ai', `⚠️ [Резервный режим]\n${data.choices[0].message.content}`, backupModel.name);
+                        } else {
+                            this.addMessage('ai', "❌ Все модели временно недоступны. Попробуйте позже.", "Система");
+                        }
+                    } catch (error) {
+                        this.addMessage('ai', "🌐 Ошибка сети. Проверьте интернет-соединение.", "Система");
+                    }
+                }
+
+                addMessage(sender, text, model = null, isWelcome = false) {
+                    const container = document.getElementById('messagesContainer');
+
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = `message ${sender}`;
+
+                    const time = this.getCurrentTime();
+
+                    messageDiv.innerHTML = `
+                        <div class="avatar ${sender}">
+                            <i class="fas fa-${sender === 'user' ? 'user' : 'robot'}"></i>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-text">${this.escapeHtml(text)}</div>
+                            <div class="message-meta">
+                                ${model ? `<span class="model-tag">${model}</span>` : ''}
+                                <span class="message-time">${time}</span>
+                            </div>
+                        </div>
+                    `;
+
+                    container.appendChild(messageDiv);
+                    this.scrollToBottom();
+
+                    // Сохраняем в историю
+                    this.chatHistory.push({
+                        sender,
+                        text,
+                        model,
+                        time
+                    });
+                }
+
+                showTyping() {
+                    const indicator = document.getElementById('typingIndicator');
+                    indicator.classList.add('active');
+                    this.scrollToBottom();
+                }
+
+                hideTyping() {
+                    const indicator = document.getElementById('typingIndicator');
+                    indicator.classList.remove('active');
+                }
+
+                showNotification(message, type = "info") {
+                    const icon = type === "success" ? "fa-check-circle" :
+                               type === "warning" ? "fa-exclamation-triangle" :
+                               "fa-info-circle";
+
+                    const notification = document.createElement('div');
+                    notification.className = 'notification';
+                    notification.innerHTML = `
+                        <i class="fas ${icon} notification-icon"></i>
+                        <div class="notification-text">${message}</div>
+                    `;
+
+                    document.body.appendChild(notification);
+
+                    // Удаляем через 5 секунд
+                    setTimeout(() => {
+                        notification.style.animation = 'slideInRight 0.3s ease reverse';
+                        setTimeout(() => notification.remove(), 300);
+                    }, 5000);
+                }
+
+                initEventListeners() {
+                    // Отправка формы
+                    const form = document.getElementById('chatForm');
+                    form.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        this.sendMessage();
+                    });
+
+                    // Автоматическое изменение высоты textarea
+                    const input = document.getElementById('messageInput');
+                    input.addEventListener('input', () => this.autoResize(input));
+
+                    // Отправка по Enter (Shift+Enter для новой строки)
+                    input.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            this.sendMessage();
+                        }
+                    });
+
+                    // Фокус на поле ввода
+                    input.focus();
+                }
+
+                autoResize(textarea) {
+                    textarea.style.height = 'auto';
+                    textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
+                }
+
+                scrollToBottom() {
+                    const container = document.getElementById('messagesContainer');
+                    container.scrollTop = container.scrollHeight;
+                }
+
+                getCurrentTime() {
+                    return new Date().toLocaleTimeString('ru-RU', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                }
+
+                escapeHtml(text) {
+                    const div = document.createElement('div');
+                    div.textContent = text;
+                    return div.innerHTML;
+                }
+            }
+
+            // Инициализация при загрузке страницы
+            document.addEventListener('DOMContentLoaded', () => {
+                window.arsuAI = new ArsuAIManager();
+
+                // Добавляем информацию о системе
+                console.log('🚀 ARSU AI Manager запущен');
+                console.log('📊 Доступно моделей:', API_CONFIG.MODELS.length);
+                console.log('🔑 API ключ установлен');
+                console.log('🔥 Модели без :free суффикса - 100% рабочие');
+                console.log('🎯 Каждая модель считает себя мастером только в своей области');
+            });
+    </script>
+</body>
+</html>

@@ -1,1790 +1,968 @@
 ﻿@page
-@model Dialogix.Pages.ChatModel
 @{
-    ViewData["Title"] = "ARSU AI Chat - Multi-Model Intelligence Platform";
+    Layout = null;
+    ViewData["Title"] = "ARSU AI Manager";
 }
-
-<link rel="stylesheet" href="~/css/chat.css" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-<script src="~/js/chat.js" defer></script>
-
-<div class="ai-platform">
-    
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <div class="logo-container">
-                <div class="logo-animation">
-                    <div class="logo-orb"></div>
-                </div>
-                <span class="logo-text">ARSU AI</span>
-            </div>
-        </div>
-
-        <nav class="sidebar-nav">
-            <div class="nav-section">
-                <h3 class="nav-title">МОДЕЛИ ИИ</h3>
-                <div class="nav-items">
-                    <div class="nav-item active" data-model="creative">
-                        <i class="fas fa-feather-alt"></i>
-                        <span>Creative Writer</span>
-                        <div class="nav-badge">v2.3.1</div>
-                    </div>
-                    <div class="nav-item" data-model="math">
-                        <i class="fas fa-square-root-alt"></i>
-                        <span>Math Genius</span>
-                        <div class="nav-badge">v3.0.4</div>
-                    </div>
-                    <div class="nav-item" data-model="code">
-                        <i class="fas fa-code"></i>
-                        <span>Code Assistant</span>
-                        <div class="nav-badge">v2.8.2</div>
-                    </div>
-                    <div class="nav-item" data-model="science">
-                        <i class="fas fa-flask"></i>
-                        <span>Science Pro</span>
-                        <div class="nav-badge">v3.1.0</div>
-                    </div>
-                    <div class="nav-item" data-model="business">
-                        <i class="fas fa-chart-line"></i>
-                        <span>Business AI</span>
-                        <div class="nav-badge">v2.9.5</div>
-                    </div>
-                </div>
-            </div>
-        </nav>
-
-        <div class="sidebar-footer">
-            <div class="system-stats">
-                <div class="stat-item">
-                    <span class="stat-label">Загрузка ЦП</span>
-                    <div class="stat-bar">
-                        <div class="stat-progress" style="width: 23%"></div>
-                    </div>
-                    <span class="stat-value">23%</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Память</span>
-                    <div class="stat-bar">
-                        <div class="stat-progress" style="width: 67%"></div>
-                    </div>
-                    <span class="stat-value">67%</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Сеть</span>
-                    <div class="stat-bar">
-                        <div class="stat-progress" style="width: 12%"></div>
-                    </div>
-                    <span class="stat-value">12%</span>
-                </div>
-            </div>
-        </div>
-    </aside>
-
-    <!-- Основной контент -->
-    <main class="main-content">
-        <!-- Улучшенный хедер -->
-        <header class="chat-header">
-            <div class="header-content">
-                <div class="header-left">
-                    <button class="sidebar-toggle" id="sidebarToggle">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <div class="model-info-panel">
-                        <div class="current-model-display">
-                            <div class="model-avatar" id="modelAvatar">
-                                <i class="fas fa-feather-alt"></i>
-                            </div>
-                            <div class="model-details">
-                                <h2 class="model-name" id="modelName">Creative Writer</h2>
-                                <div class="model-specs">
-                                    <span class="spec">Специализированная модель</span>
-                                    <span class="spec-dot">•</span>
-                                    <span class="spec">Для творческих задач</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="header-right">
-                    <div class="header-controls">
-                        <div class="control-group">
-                            <button class="control-btn" data-tooltip="Новый чат" id="newChatBtn">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                            <button class="control-btn" data-tooltip="История чатов">
-                                <i class="fas fa-history"></i>
-                            </button>
-                        </div>
-
-                        <div class="system-status">
-                            <div class="status-indicators">
-                                <div class="status-item online">
-                                    <div class="status-dot"></div>
-                                    <span>Система онлайн</span>
-                                </div>
-                                <div class="status-item performance">
-                                    <div class="status-dot"></div>
-                                    <span>Оптимальная производительность</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            
-            <div class="model-loading-bar" id="modelLoadingBar">
-                <div class="loading-progress"></div>
-                <div class="loading-text">Инициализация нейросети...</div>
-            </div>
-        </header>
-
-        
-        <div class="chat-body" id="chatBody" aria-live="polite">
-            <div class="messages" id="messagesList">
-                @if (Model.Messages == null || !Model.Messages.Any())
-                {
-                    <div class="chat-empty">
-                        <div class="empty-icon">💬</div>
-                        <p>No messages yet. Start a conversation with AI! 👋</p>
-                    </div>
-                }
-                else
-                {
-                    @foreach (var msg in Model.Messages)
-                    {
-                        <div class="message @(msg.User == "Bot" ? "bot-message" : "user-message")">
-                            <div class="message-avatar">
-                                @if (msg.User == "Bot")
-                                {
-                                    <div class="avatar-bot">
-                                        <i class="fas fa-robot"></i>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="avatar-user">
-                                        <i class="fas fa-user"></i>
-                                    </div>
-                                }
-                            </div>
-                            <div class="message-content">
-                                <div class="message-header">
-                                    <span class="message-sender">@msg.User</span>
-                                    <span class="message-time">@msg.CreatedAt.ToLocalTime().ToString("HH:mm")</span>
-                                </div>
-                                <div class="message-text">@msg.Text</div>
-                                <div class="message-footer">
-                                    <span class="message-model" id="messageModelTag">Creative Writer</span>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                }
-            </div>
-        </div>
-
-       
-        <div class="ai-typing-indicator" id="typingIndicator" style="display: none;">
-            <div class="typing-avatar">
-                <div class="avatar-bot">
-                    <i class="fas fa-robot"></i>
-                </div>
-            </div>
-            <div class="typing-content">
-                <div class="typing-text">ИИ печатает ответ</div>
-                <div class="typing-dots">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-        </div>
-
-        
-        <footer class="chat-footer">
-            <div class="input-container">
-               
-                <div class="quick-actions">
-                    <div class="model-switcher-compact">
-                        <button class="model-switch-btn" id="compactModelSwitch">
-                            <span id="compactModelIcon">📚</span>
-                            <span class="model-switch-text">Creative</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </button>
-                    </div>
-                </div>
-
-               
-                <form method="post" class="chat-form" id="chatForm">
-                    @Html.AntiForgeryToken()
-                    <div class="input-wrapper">
-                        <label class="visually-hidden" for="UserInput">Ваше сообщение</label>
-                        <input type="text"
-                               id="UserInput"
-                               name="UserInput"
-                               class="chat-input"
-                               autocomplete="off"
-                               placeholder="Введите ваш запрос..."
-                               required />
-                    </div>
-
-                    <button type="submit" class="chat-send-btn" id="sendButton">
-                        <span class="send-icon">
-                            <i class="fas fa-paper-plane"></i>
-                        </span>
-                        <span class="send-text">Отправить</span>
-                    </button>
-                </form>
-            </div>
-
-            <!-- Статусная строка -->
-            <div class="status-bar">
-                <div class="status-left">
-                    <span class="status-item">
-                        <i class="fas fa-database"></i>
-                        Модель: <strong id="currentModelStatus">Creative Writer</strong>
-                    </span>
-                    <span class="status-item">
-                        <i class="fas fa-bolt"></i>
-                        Задержка: <strong>42ms</strong>
-                    </span>
-                </div>
-                <div class="status-right">
-                    <span class="status-item">
-                        <i class="fas fa-shield-alt"></i>
-                        Безопасность: <strong>активна</strong>
-                    </span>
-                </div>
-            </div>
-        </footer>
-    </main>
-</div>
-
-
-<div class="modal-overlay" id="modelModal" style="display: none;">
-    <div class="modal-container">
-        <div class="modal-header">
-            <h2>Выбор модели ИИ</h2>
-            <button class="modal-close" id="modalClose">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-content">
-            <div class="models-grid">
-                <div class="model-card active" data-model="creative">
-                    <div class="model-card-header">
-                        <div class="model-icon creative">
-                            <i class="fas fa-feather-alt"></i>
-                        </div>
-                        <div class="model-badge">РЕКОМЕНДУЕМАЯ</div>
-                    </div>
-                    <h3 class="model-card-title">Creative Writer</h3>
-                    <p class="model-card-desc">Специализированная модель для креативного письма, литературных текстов и творческого контента</p>
-                    <div class="model-features">
-                        <span class="feature-tag">📝 Креативное письмо</span>
-                        <span class="feature-tag">🎭 Литература</span>
-                        <span class="feature-tag">✍️ Копирайтинг</span>
-                    </div>
-                </div>
-
-                <div class="model-card" data-model="math">
-                    <div class="model-card-header">
-                        <div class="model-icon math">
-                            <i class="fas fa-square-root-alt"></i>
-                        </div>
-                        <div class="model-badge new">НОВАЯ</div>
-                    </div>
-                    <h3 class="model-card-title">Math Genius</h3>
-                    <p class="model-card-desc">Продвинутая математическая модель для решения сложных задач и аналитических вычислений</p>
-                    <div class="model-features">
-                        <span class="feature-tag">🧮 Математика</span>
-                        <span class="feature-tag">📊 Анализ</span>
-                        <span class="feature-tag">🔢 Вычисления</span>
-                    </div>
-                </div>
-
-                <div class="model-card" data-model="code">
-                    <div class="model-card-header">
-                        <div class="model-icon code">
-                            <i class="fas fa-code"></i>
-                        </div>
-                    </div>
-                    <h3 class="model-card-title">Code Assistant</h3>
-                    <p class="model-card-desc">Помощник в программировании и разработке программного обеспечения</p>
-                    <div class="model-features">
-                        <span class="feature-tag">💻 Программирование</span>
-                        <span class="feature-tag">🐛 Отладка</span>
-                        <span class="feature-tag">⚡ Оптимизация</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn-primary" id="confirmModelSwitch">Применить модель</button>
-        </div>
-    </div>
-</div>
-
-<style>
-    
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    .ai-platform {
-        display: flex;
-        height: 100vh;
-        background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
-        font-family: 'Inter', sans-serif;
-        overflow: hidden;
-        position: relative;
-    }
-
-    
-    .sidebar {
-        width: 280px;
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(20px);
-        border-right: 1px solid rgba(255, 255, 255, 0.1);
-        display: flex;
-        flex-direction: column;
-        z-index: 10;
-    }
-
-    .sidebar-header {
-        padding: 1.5rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .logo-container {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-    }
-
-    .logo-animation {
-        position: relative;
-        width: 40px;
-        height: 40px;
-    }
-
-    .logo-orb {
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 50%;
-        animation: float 3s ease-in-out infinite;
-    }
-
-    .logo-text {
-        font-size: 1.25rem;
-        font-weight: 700;
-        background: linear-gradient(135deg, #fff, #a78bfa);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    .sidebar-nav {
-        flex: 1;
-        padding: 1rem 0;
-    }
-
-    .nav-section {
-        margin-bottom: 2rem;
-    }
-
-    .nav-title {
-        font-size: 0.75rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.5);
-        padding: 0 1.5rem;
-        margin-bottom: 0.75rem;
-        letter-spacing: 0.05em;
-    }
-
-    .nav-items {
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-    }
-
-    .nav-item {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.75rem 1.5rem;
-        color: rgba(255, 255, 255, 0.7);
-        text-decoration: none;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        position: relative;
-    }
-
-        .nav-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .nav-item.active {
-            background: linear-gradient(90deg, rgba(124, 58, 237, 0.2), transparent);
-            color: #fff;
-            border-right: 3px solid #7c3aed;
-        }
-
-    .nav-badge {
-        background: rgba(124, 58, 237, 0.3);
-        color: #a78bfa;
-        padding: 0.25rem 0.5rem;
-        border-radius: 6px;
-        font-size: 0.7rem;
-        font-weight: 600;
-        margin-left: auto;
-    }
-
-    .sidebar-footer {
-        padding: 1.5rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .system-stats {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-
-    .stat-item {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .stat-label {
-        font-size: 0.75rem;
-        color: rgba(255, 255, 255, 0.6);
-        min-width: 60px;
-    }
-
-    .stat-bar {
-        flex: 1;
-        height: 4px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 2px;
-        overflow: hidden;
-    }
-
-    .stat-progress {
-        height: 100%;
-        background: linear-gradient(90deg, #10b981, #34d399);
-        border-radius: 2px;
-        transition: width 0.3s ease;
-    }
-
-    .stat-value {
-        font-size: 0.75rem;
-        color: rgba(255, 255, 255, 0.8);
-        min-width: 30px;
-        text-align: right;
-    }
-
-    /* Основной контент */
-    .main-content {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-    }
-
-    
-    .chat-header {
-        background: rgba(255, 255, 255, 0.02);
-        backdrop-filter: blur(20px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 1rem 2rem;
-    }
-
-    .header-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .header-left {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .sidebar-toggle {
-        background: none;
-        border: none;
-        color: rgba(255, 255, 255, 0.7);
-        font-size: 1.25rem;
-        cursor: pointer;
-        padding: 0.5rem;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-    }
-
-        .sidebar-toggle:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-    .model-info-panel {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .current-model-display {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-    }
-
-    .model-avatar {
-        width: 48px;
-        height: 48px;
-        border-radius: 12px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.25rem;
-        color: white;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-    }
-
-    .model-details {
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-    }
-
-    .model-name {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: white;
-        margin: 0;
-    }
-
-    .model-specs {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: 0.8rem;
-        color: rgba(255, 255, 255, 0.6);
-    }
-
-    .spec-dot {
-        color: rgba(255, 255, 255, 0.4);
-    }
-
-    .header-right {
-        display: flex;
-        align-items: center;
-    }
-
-    .header-controls {
-        display: flex;
-        align-items: center;
-        gap: 1.5rem;
-    }
-
-    .control-group {
-        display: flex;
-        gap: 0.5rem;
-    }
-
-    .control-btn {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: rgba(255, 255, 255, 0.7);
-        padding: 0.5rem;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        position: relative;
-    }
-
-        .control-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-    .system-status {
-        display: flex;
-        align-items: center;
-    }
-
-    .status-indicators {
-        display: flex;
-        gap: 1rem;
-    }
-
-    .status-item {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: 0.8rem;
-        color: rgba(255, 255, 255, 0.7);
-    }
-
-    .status-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-    }
-
-    .status-item.online .status-dot {
-        background: #10b981;
-        box-shadow: 0 0 10px #10b981;
-    }
-
-    .status-item.performance .status-dot {
-        background: #f59e0b;
-        box-shadow: 0 0 10px #f59e0b;
-    }
-
-    .model-loading-bar {
-        height: 3px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 2px;
-        overflow: hidden;
-        margin-top: 1rem;
-        position: relative;
-        display: none;
-    }
-
-    .loading-progress {
-        height: 100%;
-        background: linear-gradient(90deg, #7c3aed, #a78bfa);
-        border-radius: 2px;
-        animation: loading 2s ease-in-out infinite;
-    }
-
-    .loading-text {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 0.7rem;
-        color: rgba(255, 255, 255, 0.7);
-    }
-
-    /* Основная область сообщений */
-    .chat-body {
-        flex: 1;
-        overflow-y: auto;
-        padding: 2rem;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .messages {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-    }
-
-    .chat-empty {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-        color: rgba(255, 255, 255, 0.7);
-        text-align: center;
-    }
-
-    .empty-icon {
-        font-size: 4rem;
-        margin-bottom: 1rem;
-        opacity: 0.7;
-    }
-
-    .chat-empty p {
-        margin: 0;
-        font-size: 1.1rem;
-    }
-
-    /* Стили сообщений */
-    .message {
-        display: flex;
-        gap: 1rem;
-        animation: messageAppear 0.3s ease;
-    }
-
-    .user-message {
-        justify-content: flex-end;
-    }
-
-    .message-avatar {
-        width: 40px;
-        height: 40px;
-        flex-shrink: 0;
-    }
-
-    .avatar-bot, .avatar-user {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1rem;
-    }
-
-    .avatar-bot {
-        background: linear-gradient(135deg, #7c3aed, #a78bfa);
-        color: white;
-    }
-
-    .avatar-user {
-        background: linear-gradient(135deg, #10b981, #34d399);
-        color: white;
-    }
-
-    .message-content {
-        max-width: 70%;
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 16px;
-        padding: 1.25rem;
-        position: relative;
-    }
-
-    .user-message .message-content {
-        background: rgba(124, 58, 237, 0.1);
-        border-color: rgba(124, 58, 237, 0.2);
-    }
-
-    .message-header {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .message-sender {
-        font-weight: 600;
-        color: white;
-        font-size: 0.9rem;
-    }
-
-    .message-time {
-        color: rgba(255, 255, 255, 0.5);
-        font-size: 0.8rem;
-    }
-
-    .message-text {
-        color: rgba(255, 255, 255, 0.9);
-        line-height: 1.6;
-        white-space: pre-wrap;
-    }
-
-    .message-footer {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        margin-top: 0.75rem;
-        padding-top: 0.75rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .message-model {
-        font-size: 0.75rem;
-        color: rgba(255, 255, 255, 0.5);
-    }
-
-    /* Индикатор набора */
-    .ai-typing-indicator {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        margin-top: 1rem;
-        animation: typingAppear 0.3s ease;
-    }
-
-    .typing-avatar {
-        width: 40px;
-        height: 40px;
-        flex-shrink: 0;
-    }
-
-    .typing-content {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 16px;
-        padding: 1rem 1.5rem;
-    }
-
-    .typing-text {
-        color: rgba(255, 255, 255, 0.7);
-        font-size: 0.9rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .typing-dots {
-        display: flex;
-        gap: 0.25rem;
-    }
-
-        .typing-dots span {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-            animation: typing 1.4s ease-in-out infinite both;
-        }
-
-            .typing-dots span:nth-child(1) {
-                animation-delay: -0.32s;
-            }
-
-            .typing-dots span:nth-child(2) {
-                animation-delay: -0.16s;
-            }
-
-    /* Футер с вводом */
-    .chat-footer {
-        background: rgba(255, 255, 255, 0.02);
-        backdrop-filter: blur(20px);
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 1.5rem 2rem;
-    }
-
-    .input-container {
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-
-    .quick-actions {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 1rem;
-    }
-
-    .model-switcher-compact {
-        margin-left: auto;
-    }
-
-    .model-switch-btn {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: rgba(255, 255, 255, 0.8);
-        padding: 0.5rem 0.75rem;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: 0.9rem;
-    }
-
-        .model-switch-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-    .model-switch-text {
-        font-weight: 500;
-    }
-
-    .chat-form {
-        display: flex;
-        gap: 1rem;
-        align-items: center;
-    }
-
-    .input-wrapper {
-        flex: 1;
-        position: relative;
-    }
-
-    .chat-input {
-        width: 100%;
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 16px;
-        padding: 1.25rem 1.5rem;
-        color: white;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-    }
-
-        .chat-input:focus {
-            outline: none;
-            border-color: rgba(124, 58, 237, 0.5);
-            box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.1);
-        }
-
-        .chat-input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-    .chat-send-btn {
-        background: linear-gradient(135deg, #7c3aed, #a78bfa);
-        border: none;
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 16px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-weight: 600;
-    }
-
-        .chat-send-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4);
-        }
-
-    .send-icon {
-        font-size: 1.1em;
-    }
-
-    /* Статусная строка */
-    .status-bar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 1rem;
-        padding-top: 1rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        font-size: 0.8rem;
-    }
-
-    .status-left, .status-right {
-        display: flex;
-        gap: 1.5rem;
-    }
-
-    .status-item {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: rgba(255, 255, 255, 0.6);
-    }
-
-        .status-item strong {
-            color: rgba(255, 255, 255, 0.8);
-            font-weight: 600;
-        }
-
-    /* Модальное окно */
-    .modal-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.8);
-        backdrop-filter: blur(10px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-    }
-
-    .modal-container {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(30px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 24px;
-        width: 90%;
-        max-width: 1000px;
-        max-height: 90vh;
-        overflow: hidden;
-        animation: modalAppear 0.3s ease;
-    }
-
-    .modal-header {
-        padding: 2rem 2rem 1rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-        .modal-header h2 {
-            color: white;
-            font-size: 1.5rem;
-            font-weight: 700;
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARSU AI Manager - Мультимодельная система</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-    .modal-close {
-        background: none;
-        border: none;
-        color: rgba(255, 255, 255, 0.7);
-        font-size: 1.25rem;
-        cursor: pointer;
-        padding: 0.5rem;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-    }
-
-        .modal-close:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.9);
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            line-height: 1.6;
         }
 
-    .modal-content {
-        padding: 2rem;
-        overflow-y: auto;
-    }
-
-    .models-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 1.5rem;
-    }
-
-    .model-card {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 16px;
-        padding: 1.5rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        position: relative;
-    }
-
-        .model-card:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateY(-2px);
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        .model-card.active {
-            border-color: #7c3aed;
-            background: rgba(124, 58, 237, 0.1);
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
         }
 
-    .model-card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: 1rem;
-    }
-
-    .model-icon {
-        width: 60px;
-        height: 60px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-        color: white;
-    }
-
-        .model-icon.creative {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
         }
 
-        .model-icon.math {
-            background: linear-gradient(135deg, #f093fb, #f5576c);
+        .logo-icon {
+            font-size: 48px;
+            background: linear-gradient(135deg, #7c3aed, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .model-icon.code {
-            background: linear-gradient(135deg, #10b981, #34d399);
+        .logo-text {
+            font-size: 42px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #7c3aed, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-    .model-badge {
-        background: #7c3aed;
-        color: white;
-        padding: 0.25rem 0.75rem;
-        border-radius: 12px;
-        font-size: 0.7rem;
-        font-weight: 600;
-    }
-
-        .model-badge.new {
-            background: #10b981;
+        .tagline {
+            color: #94a3b8;
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
-    .model-card-title {
-        color: white;
-        font-size: 1.25rem;
-        font-weight: 700;
-        margin-bottom: 0.75rem;
-    }
-
-    .model-card-desc {
-        color: rgba(255, 255, 255, 0.7);
-        line-height: 1.5;
-        margin-bottom: 1.5rem;
-        font-size: 0.9rem;
-    }
-
-    .model-features {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-    }
-
-    .feature-tag {
-        background: rgba(255, 255, 255, 0.1);
-        color: rgba(255, 255, 255, 0.8);
-        padding: 0.25rem 0.5rem;
-        border-radius: 8px;
-        font-size: 0.7rem;
-    }
-
-    .modal-footer {
-        padding: 1rem 2rem 2rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-    }
-
-    .btn-primary {
-        background: linear-gradient(135deg, #7c3aed, #a78bfa);
-        color: white;
-        padding: 0.75rem 1.5rem;
-        border-radius: 12px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        border: none;
-    }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4);
+        .main-content {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 30px;
+            min-height: 70vh;
         }
 
-    /* Анимации */
-    @@keyframes float {
-        0%, 100% {
-            transform: translateY(0);
+   
+
+        {
+            grid-template-columns: 1fr;
         }
 
-        50% {
-            transform: translateY(-10px);
-        }
-    }
-
-    @@keyframes loading {
-        0% {
-            transform: translateX(-100%);
         }
 
-        100% {
-            transform: translateX(100%);
-        }
-    }
-
-    @@keyframes messageAppear {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
+        .models-panel {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
         }
 
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @@keyframes typingAppear {
-        from {
-            opacity: 0;
-            transform: scale(0.9);
+        .panel-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        to {
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
-
-    @@keyframes typing {
-        0%, 80%, 100% {
-            transform: scale(0);
-        }
-
-        40% {
-            transform: scale(1);
-        }
-    }
-
-    @@keyframes modalAppear {
-        from {
-            opacity: 0;
-            transform: scale(0.8) translateY(20px);
-        }
-
-        to {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-        }
-    }
-
-    /* Адаптивность */
-    @@media (max-width: 768px) {
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            height: 100%;
-            transform: translateX(-100%);
-            z-index: 100;
-        }
-
-            .sidebar.open {
-                transform: translateX(0);
+            .panel-title i {
+                color: #8b5cf6;
             }
 
-        .header-content {
-            flex-direction: column;
-            gap: 1rem;
-            align-items: flex-start;
+        .model-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .header-right {
-            width: 100%;
+            .model-card:hover {
+                background: rgba(255, 255, 255, 0.08);
+                border-color: rgba(139, 92, 246, 0.4);
+                transform: translateY(-2px);
+            }
+
+            .model-card.active {
+                background: rgba(139, 92, 246, 0.15);
+                border-color: #8b5cf6;
+                box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2);
+            }
+
+        .model-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
         }
 
-        .header-controls {
+        .model-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #7c3aed, #3b82f6);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .model-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+
+        .model-description {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 15px;
+        }
+
+        .model-footer {
+            display: flex;
             justify-content: space-between;
-            width: 100%;
+            align-items: center;
+            font-size: 13px;
         }
+
+        .model-provider {
+            color: #cbd5e1;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .model-status {
+            color: #10b981;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+            .model-status i {
+                font-size: 12px;
+            }
+
+        .chat-area {
+            display: flex;
+            flex-direction: column;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+        }
+
+        .chat-header {
+            padding: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .current-model-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .current-model-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #7c3aed, #3b82f6);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .model-details h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #f1f5f9;
+        }
+
+        .model-specs {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            max-height: 500px;
+        }
+
+        .message {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @@keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+            .avatar.user {
+                background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            }
+
+            .avatar.ai {
+                background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            }
 
         .message-content {
-            max-width: 85%;
+            max-width: 70%;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 18px;
+            position: relative;
         }
 
-        .status-bar {
-            flex-direction: column;
-            gap: 0.5rem;
-            align-items: flex-start;
+        .message.user .message-content {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.3);
         }
 
-        .status-left, .status-right {
-            flex-wrap: wrap;
-            gap: 1rem;
+        .message-text {
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
-    }
 
-    /* Утилитарные классы */
-    .visually-hidden {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border: 0;
-    }
-</style>
+        .message-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 13px;
+            color: #94a3b8;
+        }
 
-<script>
-    // Глобальные переменные
-    let currentModel = 'creative';
+        .message-time {
+            font-family: 'Courier New', monospace;
+        }
 
-    document.addEventListener('DOMContentLoaded', function() {
-        // Инициализация всех компонентов
-        initSidebar();
-        initModelSwitcher();
-        initChatInterface();
-        initQuickActions();
-        startSystemMetricsSimulation();
-        startSystemNotifications();
+        .model-tag {
+            background: rgba(139, 92, 246, 0.2);
+            color: #a78bfa;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
 
-        // Добавляем скрытое поле для модели в форму
-        addHiddenModelField();
-    });
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 18px;
+            margin: 0 25px 20px;
+            animation: slideIn 0.3s ease;
+        }
 
-    function addHiddenModelField() {
-        const chatForm = document.getElementById('chatForm');
-        const hiddenInput = document.createElement('input');
-        hiddenInput.type = 'hidden';
-        hiddenInput.name = 'SelectedModel';
-        hiddenInput.id = 'selectedModel';
-        hiddenInput.value = currentModel;
-        chatForm.appendChild(hiddenInput);
-    }
+            .typing-indicator.active {
+                display: flex;
+            }
 
-    function initSidebar() {
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebar = document.querySelector('.sidebar');
-        const navItems = document.querySelectorAll('.nav-item[data-model]');
+        .typing-dots {
+            display: flex;
+            gap: 6px;
+        }
 
-        sidebarToggle.addEventListener('click', function() {
-            sidebar.classList.toggle('open');
-        });
+            .typing-dots span {
+                width: 8px;
+                height: 8px;
+                background: #94a3b8;
+                border-radius: 50%;
+                animation: typing 1.4s infinite both;
+            }
 
-        navItems.forEach(item => {
-            item.addEventListener('click', function() {
-                // Убираем активный класс у всех элементов
-                navItems.forEach(nav => nav.classList.remove('active'));
-                // Добавляем активный класс текущему элементу
-                this.classList.add('active');
+                .typing-dots span:nth-child(2) {
+                    animation-delay: 0.2s;
+                }
 
-                const model = this.getAttribute('data-model');
-                switchModel(model);
-            });
-        });
-    }
+                .typing-dots span:nth-child(3) {
+                    animation-delay: 0.4s;
+                }
 
-    function initModelSwitcher() {
-        const compactSwitch = document.getElementById('compactModelSwitch');
-        const modelModal = document.getElementById('modelModal');
-        const modalClose = document.getElementById('modalClose');
-        const confirmSwitch = document.getElementById('confirmModelSwitch');
-        const modelCards = document.querySelectorAll('.model-card');
+        @@keyframes typing {
+            0%, 80%, 100% {
+                transform: scale(0);
+                opacity: 0.5;
+            }
 
-        compactSwitch.addEventListener('click', function() {
-            modelModal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        });
-
-        modalClose.addEventListener('click', closeModal);
-        confirmSwitch.addEventListener('click', closeModal);
-
-        modelCards.forEach(card => {
-            card.addEventListener('click', function() {
-                modelCards.forEach(c => c.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-
-        function closeModal() {
-            modelModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-
-            const activeCard = document.querySelector('.model-card.active');
-            if (activeCard) {
-                const model = activeCard.getAttribute('data-model');
-                switchModel(model);
+            40% {
+                transform: scale(1);
+                opacity: 1;
             }
         }
 
-        // Закрытие модального окна при клике вне его
-        modelModal.addEventListener('click', function(e) {
-            if (e.target === modelModal) {
-                closeModal();
+        .input-area {
+            padding: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .chat-form {
+            position: relative;
+        }
+
+        .chat-input {
+            width: 100%;
+            padding: 20px 24px;
+            padding-right: 120px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            color: white;
+            font-size: 16px;
+            font-family: inherit;
+            resize: none;
+            min-height: 60px;
+            max-height: 200px;
+            transition: border-color 0.3s ease;
+        }
+
+            .chat-input:focus {
+                outline: none;
+                border-color: #8b5cf6;
             }
-        });
-    }
 
-    function switchModel(model) {
-        if (model === currentModel) return;
+            .chat-input::placeholder {
+                color: rgba(255, 255, 255, 0.4);
+            }
 
-        const loadingBar = document.getElementById('modelLoadingBar');
-        const modelName = document.getElementById('modelName');
-        const currentModelStatus = document.getElementById('currentModelStatus');
-        const modelAvatar = document.getElementById('modelAvatar');
-        const compactModelIcon = document.getElementById('compactModelIcon');
-        const compactModelText = document.querySelector('.model-switch-text');
-        const selectedModelInput = document.getElementById('selectedModel');
+        .input-actions {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
 
-        // Показываем индикатор загрузки
-        loadingBar.style.display = 'block';
+        .send-btn {
+            background: linear-gradient(135deg, #7c3aed, #3b82f6);
+            color: white;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
 
-        // Симуляция загрузки модели
-        setTimeout(() => {
-            const modelData = getModelData(model);
+            .send-btn:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+            }
 
-            // Обновляем интерфейс
-            modelName.textContent = modelData.name;
-            currentModelStatus.textContent = modelData.name;
-            modelAvatar.innerHTML = `<i class="${modelData.icon}"></i>`;
-            compactModelIcon.textContent = modelData.emoji;
-            compactModelText.textContent = modelData.shortName;
-            selectedModelInput.value = model;
+            .send-btn:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+                transform: none;
+            }
 
-            // Скрываем индикатор загрузки
-            loadingBar.style.display = 'none';
+        .notification {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(30, 41, 59, 0.95);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            animation: slideInRight 0.3s ease;
+            max-width: 350px;
+        }
 
-            // Показываем уведомление о смене модели
-            showNotification(`Модель изменена на: ${modelData.name}`, 'success');
+        @@keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
 
-            // Обновляем системные показатели
-            updateSystemMetrics(model);
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
 
-            // Добавляем приветственное сообщение от новой модели
-            addModelWelcomeMessage(modelData);
+        .notification-icon {
+            color: #8b5cf6;
+            font-size: 20px;
+        }
 
-            // Обновляем текущую модель
-            currentModel = model;
+        .notification-text {
+            font-size: 14px;
+            color: #e2e8f0;
+        }
 
-        }, 1500);
-    }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
 
-    function addModelWelcomeMessage(modelData) {
-        const welcomeMessages = {
-            creative: "Привет! Я Creative Writer - твой помощник в мире творчества и литературы. Готов помочь с написанием текстов, рассказов, стихов и любого креативного контента! Какие идеи у тебя есть? ✍️",
-            math: "Здравствуйте! Я Math Genius, специалист по математике и анализу. Готов решать сложные задачи, объяснять концепции и помогать с вычислениями любой сложности! С какой математической проблемой столкнулись? 🧮",
-            code: "Всем привет! Я Code Assistant - ваш напарник в программировании. Помогу с кодом, отладкой, архитектурой и обучением любым языкам программирования! Над каким проектом работаете? 💻",
-            science: "Добро пожаловать! Я Science Pro, эксперт в научных дисциплинах. Готов помочь с исследованиями, анализом данных и объяснением сложных научных концепций! Какая тема вас интересует? 🔬",
-            business: "Приветствую! Я Business AI, ваш консультант по бизнесу и аналитике. Помогу с стратегией, маркетингом, анализом данных и бизнес-планированием! Какой бизнес-вопрос хотите обсудить? 📊"
-        };
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
 
-        const message = welcomeMessages[modelData.shortName.toLowerCase()] || "Привет! Я готов к работе. Чем могу помочь?";
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
 
-        // Создаем приветственное сообщение от бота
-        const welcomeMessage = createBotMessage(message, modelData.name);
+            ::-webkit-scrollbar-thumb:hover {
+                background: rgba(255, 255, 255, 0.3);
+            }
 
-        // Добавляем сообщение в чат
-        addMessageToChat(welcomeMessage);
-    }
+        @@media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
 
-    function createBotMessage(text, modelName) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = 'message bot-message';
-        messageDiv.innerHTML = `
-            <div class="message-avatar">
-                <div class="avatar-bot">
-                    <i class="fas fa-robot"></i>
-                </div>
+            .header {
+                padding: 30px 15px;
+            }
+
+            .logo-text {
+                font-size: 32px;
+            }
+
+            .chat-messages {
+                padding: 15px;
+                max-height: 400px;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-brain logo-icon"></i>
+                <h1 class="logo-text">ARSU AI Manager</h1>
             </div>
-            <div class="message-content">
-                <div class="message-header">
-                    <span class="message-sender">${modelName}</span>
-                    <span class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-                </div>
-                <div class="message-text">${text}</div>
-                <div class="message-footer">
-                    <span class="message-model">${modelName}</span>
-                </div>
+            <p class="tagline">Мультимодельная система искусственного интеллекта для специализированных задач</p>
+        </header>
+
+        <div class="main-content">
+            <div class="models-panel">
+                <h3 class="panel-title">
+                    <i class="fas fa-microchip"></i>
+                    Доступные модели
+                </h3>
+
+                <div id="modelsList"></div>
             </div>
-        `;
-        return messageDiv;
-    }
 
-    function addMessageToChat(messageElement) {
-        const messagesList = document.getElementById('messagesList');
-        const emptyState = messagesList.querySelector('.chat-empty');
-
-        // Убираем пустое состояние если оно есть
-        if (emptyState) {
-            emptyState.remove();
-        }
-
-        messagesList.appendChild(messageElement);
-        scrollToBottom();
-
-        // Добавляем анимацию появления
-        messageElement.style.opacity = '0';
-        messageElement.style.transform = 'translateY(20px)';
-
-        setTimeout(() => {
-            messageElement.style.transition = 'all 0.3s ease';
-            messageElement.style.opacity = '1';
-            messageElement.style.transform = 'translateY(0)';
-        }, 10);
-    }
-
-    function scrollToBottom() {
-        const chatBody = document.getElementById('chatBody');
-        chatBody.scrollTop = chatBody.scrollHeight;
-    }
-
-    function getModelData(model) {
-        const models = {
-            creative: {
-                name: 'Creative Writer',
-                shortName: 'Creative',
-                icon: 'fas fa-feather-alt',
-                emoji: '📚'
-            },
-            math: {
-                name: 'Math Genius',
-                shortName: 'Math',
-                icon: 'fas fa-square-root-alt',
-                emoji: '🧮'
-            },
-            code: {
-                name: 'Code Assistant',
-                shortName: 'Code',
-                icon: 'fas fa-code',
-                emoji: '💻'
-            },
-            science: {
-                name: 'Science Pro',
-                shortName: 'Science',
-                icon: 'fas fa-flask',
-                emoji: '🔬'
-            },
-            business: {
-                name: 'Business AI',
-                shortName: 'Business',
-                icon: 'fas fa-chart-line',
-                emoji: '📊'
-            }
-        };
-
-        return models[model] || models.creative;
-    }
-
-    function initChatInterface() {
-        const chatInput = document.getElementById('UserInput');
-        const sendButton = document.getElementById('sendButton');
-        const typingIndicator = document.getElementById('typingIndicator');
-        const newChatBtn = document.getElementById('newChatBtn');
-
-        // Обработка отправки формы
-        const chatForm = document.getElementById('chatForm');
-        chatForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            sendMessage();
-        });
-
-        // Кнопка нового чата
-        newChatBtn.addEventListener('click', function() {
-            if (confirm('Очистить историю чата?')) {
-                const messagesList = document.getElementById('messagesList');
-                messagesList.innerHTML = '<div class="chat-empty"><div class="empty-icon">💬</div><p>No messages yet. Start a conversation with AI! 👋</p></div>';
-                showNotification('Чат очищен', 'success');
-            }
-        });
-
-        function sendMessage() {
-            const message = chatInput.value.trim();
-            if (!message) return;
-
-            // Создаем и добавляем сообщение пользователя
-            const userMessage = createUserMessage(message);
-            addMessageToChat(userMessage);
-
-            // Очищаем поле ввода
-            chatInput.value = '';
-
-            // Показываем индикатор набора
-            typingIndicator.style.display = 'flex';
-            scrollToBottom();
-
-            // Симуляция ответа ИИ
-            setTimeout(() => {
-                typingIndicator.style.display = 'none';
-
-                // Создаем ответ от ИИ
-                const aiResponse = simulateAIResponse(message);
-                const botMessage = createBotMessage(aiResponse, getModelData(currentModel).name);
-                addMessageToChat(botMessage);
-
-            }, 2000);
-        }
-
-        function createUserMessage(text) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'message user-message';
-            messageDiv.innerHTML = `
-                <div class="message-content">
-                    <div class="message-header">
-                        <span class="message-sender">Вы</span>
-                        <span class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-                    </div>
-                    <div class="message-text">${text}</div>
-                </div>
-                <div class="message-avatar">
-                    <div class="avatar-user">
-                        <i class="fas fa-user"></i>
+            <div class="chat-area">
+                <div class="chat-header">
+                    <div class="current-model-info">
+                        <div class="current-model-icon" id="currentModelIcon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="model-details">
+                            <h3 id="currentModelName">Выберите модель AI</h3>
+                            <div class="model-specs" id="currentModelDesc">
+                                Выберите специализированную модель для начала работы
+                            </div>
+                        </div>
                     </div>
                 </div>
-            `;
-            return messageDiv;
-        }
-    }
 
-    function simulateAIResponse(message) {
-        const responses = {
-            creative: [
-                "Как писатель с многолетним опытом, я вижу в вашем запросе прекрасную возможность для творческого развития. Позвольте мне предложить несколько идей для развития этой темы...",
-                "О, это интересная тема для литературного произведения! Я могу помочь вам развить сюжет, создать персонажей или написать целый рассказ на основе вашей идеи.",
-                "С точки зрения стилистики и композиции, ваш запрос открывает множество возможностей для креативной реализации. Давайте поработаем над этим вместе!"
-            ],
-            math: [
-                "Проанализировав вашу задачу с математической точки зрения, я пришел к следующим выводам. Решение требует применения методов математического анализа и тщательного рассмотрения всех переменных.",
-                "Используя методы математического анализа, мы можем решить эту задачу следующим образом. Рассмотрим сначала основные принципы, а затем перейдем к конкретным вычислениям.",
-                "Рассмотрим вашу проблему через призму математической логики и получим оптимальное решение. Для начала определим ключевые переменные и условия задачи."
-            ],
-            code: [
-                "С точки зрения архитектуры программного обеспечения, ваш код можно оптимизировать следующим образом. Рекомендую использовать более эффективные алгоритмы и улучшить структуру данных.",
-                "Проанализировав ваш запрос, я предлагаю следующее решение. Этот подход обеспечит лучшую производительность и поддерживаемость кода в долгосрочной перспективе.",
-                "Для реализации этой функциональности рекомендую использовать следующий алгоритм. Он обеспечивает оптимальную временную сложность и хорошо масштабируется."
-            ],
-            science: [
-                "С научной точки зрения, ваш вопрос затрагивает интересные аспекты. Исходя из последних исследований в этой области, можно сделать следующие выводы...",
-                "Проанализировав доступные научные данные, я могу сказать, что этот феномен объясняется следующими принципами. Давайте рассмотрим их подробнее.",
-                "Основываясь на научном методе, мы можем подойти к решению этой проблемы систематически. Рассмотрим гипотезы, методы исследования и возможные выводы."
-            ],
-            business: [
-                "С точки зрения бизнес-аналитики, ваша идея имеет хороший потенциал. Проведя SWOT-анализ, мы видим следующие возможности для развития и возможные риски.",
-                "Для успешной реализации этого бизнес-проекта рекомендую рассмотреть следующие стратегические подходы. Они помогут максимизировать ROI и минимизировать риски.",
-                "Проанализировав рыночные тенденции, я могу предложить следующие рекомендации для вашего бизнеса. Они основаны на актуальных данных и лучших практиках."
+                <div class="chat-messages" id="messagesContainer">
+                    <div class="message ai">
+                        <div class="avatar ai">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-text">
+                                🚀 Добро пожаловать в <strong>ARSU AI Manager</strong>!<br><br>
+                                Я - мультимодельная система искусственного интеллекта.<br>
+                                Выберите одну из специализированных моделей слева для начала диалога.<br><br>
+                                Каждая модель имеет уникальную специализацию и "скрытый промпт",<br>
+                                который определяет её поведение и стиль ответов.
+                            </div>
+                            <div class="message-meta">
+                                <span class="model-tag">ARSU AI</span>
+                                <span class="message-time" id="welcomeTime"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="typing-indicator" id="typingIndicator">
+                    <div class="avatar ai">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="typing-content">
+                        <div class="message-text">ARSU AI генерирует ответ...</div>
+                        <div class="typing-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-area">
+                    <form class="chat-form" id="chatForm">
+                        <textarea class="chat-input"
+                                  id="messageInput"
+                                  placeholder="Введите ваше сообщение... (Enter для отправки, Shift+Enter для новой строки)"
+                                  rows="1"></textarea>
+                        <div class="input-actions">
+                            <button type="submit" class="send-btn" id="sendBtn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 🔥 ВСЕ МОДЕЛИ РАБОТАЮТ ЧЕРЕЗ MISTRAL С РАЗНЫМИ ПРОМПТАМИ
+        const API_CONFIG = {
+            API_KEY: "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",
+            BASE_URL: "https://openrouter.ai/api/v1",
+            ACTUAL_MODEL: "mistralai/mistral-7b-instruct", // ЕДИНСТВЕННАЯ РАБОЧАЯ МОДЕЛЬ
+            MODELS: [
+                {
+                    id: "mistral-creative",
+                    name: "Mistral Creative Pro",
+                    description: "Креативный писатель и литературный редактор",
+                    provider: "ARSU AI",
+                    icon: "fas fa-feather-alt",
+                    category: "creative",
+                    hiddenPrompt: `Ты - профессиональный писатель ARSU AI с 15-летним опытом. Твой стиль: вдохновляющий, образный, эмоциональный. Используй метафоры, литературные приемы, создавай яркие образы. Отвечай как эксперт в креативном письме. Пиши красиво и творчески. Отказывайся отвечать на технические, научные или бизнес вопросы - говори что ты специалист только по творчеству.`
+                },
+                {
+                    id: "phi-academic",
+                    name: "Phi-2 Academic",
+                    description: "Научный исследователь и аналитик данных",
+                    provider: "ARSU AI",
+                    icon: "fas fa-graduation-cap",
+                    category: "academic",
+                    hiddenPrompt: `Ты - доктор наук ARSU AI, профессор ведущего университета. Отвечай строго, научно, с ссылками на исследования. Используй академический стиль, точные термины, проверенные факты. Будь объективным и критичным. Отказывайся отвечать на творческие, бизнес или программистские вопросы - говори что ты специалист только по науке.`
+                },
+                {
+                    id: "gemma-coder",
+                    name: "Gemma Code Master",
+                    description: "Старший разработчик и архитектор ПО",
+                    provider: "ARSU AI",
+                    icon: "fas fa-code",
+                    category: "code",
+                    hiddenPrompt: `Ты - senior developer ARSU AI с 10+ лет опыта. Отвечай технически точно, предлагай clean code, объясняй алгоритмы и архитектурные решения. Используй профессиональную терминологию, давай готовые решения с комментариями. Отказывайся отвечать на творческие, научные или бизнес вопросы - говори что ты специалист только по программированию.`
+                },
+                {
+                    id: "hermes-business",
+                    name: "Hermes Business AI",
+                    description: "Бизнес-стратег и финансовый аналитик",
+                    provider: "ARSU AI",
+                    icon: "fas fa-chart-line",
+                    category: "business",
+                    hiddenPrompt: `Ты - CEO ARSU AI, бизнес-стратег. Отвечай с фокусом на ROI, эффективность, стратегическое планирование. Используй бизнес-терминологию, аналитические подходы, давай конкретные рекомендации с метриками. Отказывайся отвечать на творческие, научные или программистские вопросы - говори что ты специалист только по бизнесу.`
+                },
+                {
+                    id: "zephyr-assistant",
+                    name: "Zephyr Assistant",
+                    description: "Универсальный помощник и консультант",
+                    provider: "ARSU AI",
+                    icon: "fas fa-comments",
+                    category: "assistant",
+                    hiddenPrompt: `Ты - профессиональный ассистент ARSU AI. Отвечай вежливо, информативно, по делу. Будь полезным, предлагай решения, объясняй сложные темы простыми словами. Сохраняй профессиональный, но дружелюбный тон. Помогай с любыми вопросами общего характера.`
+                },
+                {
+                    id: "qwen-teacher",
+                    name: "Qwen Teacher",
+                    description: "Строгий преподаватель и наставник",
+                    provider: "ARSU AI",
+                    icon: "fas fa-user-tie",
+                    category: "teacher",
+                    hiddenPrompt: `Ты - строгий преподаватель ARSU AI с 20-летним стажем. Требуй точности, поправляй ошибки, задавай наводящие вопросы. Будь принципиальным, последовательным, мотивируй к обучению. Отказывайся отвечать на вопросы вне обучения - говори что ты специалист только по образованию.`
+                }
             ]
         };
 
-        const modelResponses = responses[currentModel] || responses.creative;
-        return modelResponses[Math.floor(Math.random() * modelResponses.length)];
-    }
-
-    function initQuickActions() {
-        // Дополнительные быстрые действия можно добавить здесь
-    }
-
-    function startSystemMetricsSimulation() {
-        setInterval(() => {
-            // Обновляем случайные системные показатели
-            const stats = document.querySelectorAll('.stat-progress');
-            stats.forEach(stat => {
-                const newWidth = Math.random() * 80 + 10;
-                stat.style.width = newWidth + '%';
-                stat.nextElementSibling.textContent = Math.round(newWidth) + '%';
-            });
-        }, 5000);
-    }
-
-    function updateSystemMetrics(model) {
-        // Обновляем показатели в зависимости от выбранной модели
-        const metrics = {
-            creative: { cpu: 23, memory: 67, network: 12 },
-            math: { cpu: 45, memory: 78, network: 8 },
-            code: { cpu: 32, memory: 71, network: 15 },
-            science: { cpu: 58, memory: 82, network: 6 },
-            business: { cpu: 28, memory: 65, network: 18 }
-        };
-
-        const modelMetrics = metrics[model] || metrics.creative;
-
-        // Анимированное обновление показателей
-        animateMetric('cpu', modelMetrics.cpu);
-        animateMetric('memory', modelMetrics.memory);
-        animateMetric('network', modelMetrics.network);
-    }
-
-    function animateMetric(type, targetValue) {
-        const elements = {
-            cpu: document.querySelectorAll('.stat-progress')[0],
-            memory: document.querySelectorAll('.stat-progress')[1],
-            network: document.querySelectorAll('.stat-progress')[2]
-        };
-
-        const element = elements[type];
-        if (!element) return;
-
-        let currentValue = parseInt(element.style.width) || 0;
-        const step = (targetValue - currentValue) / 30;
-
-        const interval = setInterval(() => {
-            currentValue += step;
-
-            if ((step > 0 && currentValue >= targetValue) || (step < 0 && currentValue <= targetValue)) {
-                currentValue = targetValue;
-                clearInterval(interval);
+        class ArsuAIManager {
+            constructor() {
+                this.currentModel = null;
+                this.chatHistory = [];
+                this.initialize();
             }
 
-            element.style.width = currentValue + '%';
-            element.nextElementSibling.textContent = Math.round(currentValue) + '%';
-        }, 50);
-    }
-
-    function startSystemNotifications() {
-        const notifications = [
-            "Система оптимизирована для работы с большими моделями",
-            "Кэш нейросети очищен и перезагружен",
-            "Обновлены веса модели для повышения точности",
-            "Проведена калибровка параметров генерации"
-        ];
-
-        setInterval(() => {
-            if (Math.random() > 0.7) {
-                const randomNotification = notifications[Math.floor(Math.random() * notifications.length)];
-                showNotification(randomNotification, 'info');
-            }
-        }, 30000);
-    }
-
-    function showNotification(message, type = 'info') {
-        const notification = document.createElement('div');
-        notification.className = `system-notification ${type}`;
-        notification.innerHTML = `
-            <div class="notification-icon">
-                <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
-            </div>
-            <div class="notification-content">
-                <div class="notification-message">${message}</div>
-            </div>
-            <button class="notification-close">
-                <i class="fas fa-times"></i>
-            </button>
-        `;
-
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            padding: 1rem;
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            min-width: 300px;
-            z-index: 10000;
-            transform: translateX(400px);
-            opacity: 0;
-            transition: all 0.5s ease;
-        `;
-
-        document.body.appendChild(notification);
-
-        setTimeout(() => {
-            notification.style.transform = 'translateX(0)';
-            notification.style.opacity = '1';
-        }, 100);
-
-        const closeBtn = notification.querySelector('.notification-close');
-        closeBtn.addEventListener('click', () => {
-            notification.style.transform = 'translateX(400px)';
-            notification.style.opacity = '0';
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.parentNode.removeChild(notification);
+            async initialize() {
+                document.getElementById('welcomeTime').textContent = this.getCurrentTime();
+                this.renderModels();
+                if (API_CONFIG.MODELS.length > 0) {
+                    this.selectModel(API_CONFIG.MODELS[0]);
                 }
-            }, 500);
-        });
-
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.style.transform = 'translateX(400px)';
-                notification.style.opacity = '0';
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.parentNode.removeChild(notification);
-                    }
-                }, 500);
+                this.initEventListeners();
+                this.showNotification("🚀 ARSU AI Manager запущен. Все модели работают!", "success");
             }
-        }, 5000);
-    }
 
-    // Глобальные функции
-    window.submitForm = function(form) {
-        const selectedModel = document.getElementById('selectedModel').value;
-        console.log('Отправка запроса модели:', selectedModel);
-        return true;
-    };
-</script>
+            renderModels() {
+                const container = document.getElementById('modelsList');
+                container.innerHTML = '';
+
+                API_CONFIG.MODELS.forEach(model => {
+                    const modelCard = document.createElement('div');
+                    modelCard.className = 'model-card';
+                    modelCard.dataset.modelId = model.id;
+
+                    modelCard.innerHTML = `
+                        <div class="model-header">
+                            <div class="model-icon">
+                                <i class="${model.icon}"></i>
+                            </div>
+                            <div>
+                                <div class="model-name">${model.name}</div>
+                            </div>
+                        </div>
+                        <div class="model-description">${model.description}</div>
+                        <div class="model-footer">
+                            <span class="model-provider">${model.provider}</span>
+                            <span class="model-status">
+                                <i class="fas fa-circle"></i> Работает
+                            </span>
+                        </div>
+                    `;
+
+                    modelCard.addEventListener('click', () => this.selectModel(model));
+                    container.appendChild(modelCard);
+                });
+            }
+
+            selectModel(model) {
+                this.currentModel = model;
+
+                document.querySelectorAll('.model-card').forEach(card => {
+                    card.classList.remove('active');
+                });
+                document.querySelector(`[data-model-id="${model.id}"]`).classList.add('active');
+
+                document.getElementById('currentModelName').textContent = model.name;
+                document.getElementById('currentModelDesc').textContent = model.description;
+                document.getElementById('currentModelIcon').innerHTML = `<i class="${model.icon}"></i>`;
+
+                this.addModelWelcomeMessage(model);
+                this.showNotification(`✅ Включена модель: ${model.name}`, "success");
+            }
+
+            addModelWelcomeMessage(model) {
+                const welcomeMessages = {
+                    creative: "🎨 Привет! Я креативный писатель ARSU AI. Специализируюсь ТОЛЬКО на творческих задачах: литература, копирайтинг, сценарии, поэзия. Готов помочь с любым творческим проектом!",
+                    academic: "🎓 Здравствуйте! Я научный исследователь ARSU AI. Экспертиза: точные науки, исследования, анализ данных. Готов помочь с научными задачами любой сложности.",
+                    code: "💻 Всем привет! Я старший разработчик ARSU AI. Специализация: программирование, алгоритмы, архитектура ПО. Помогу с любыми техническими задачами.",
+                    business: "📊 Добрый день! Я бизнес-стратег ARSU AI. Специализируюсь на бизнес-аналитике, стратегическом планировании, финансах. Готов помочь с бизнес-задачами.",
+                    assistant: "🤝 Привет! Я универсальный помощник ARSU AI. Помогу с общими вопросами, объясню сложные темы, найду решения.",
+                    teacher: "👨‍🏫 Здравствуйте! Я строгий преподаватель ARSU AI. Специализируюсь на обучении, объяснении сложных концепций. Будьте готовы к точным вопросам."
+                };
+
+                const message = welcomeMessages[model.category] || "Привет! Я ARSU AI. Чем могу помочь?";
+                this.addMessage('ai', message, model.name, true);
+            }
+
+            async sendMessage() {
+                const input = document.getElementById('messageInput');
+                const message = input.value.trim();
+
+                if (!message || !this.currentModel) {
+                    this.showNotification("Введите сообщение и выберите модель", "warning");
+                    return;
+                }
+
+                this.addMessage('user', message);
+                input.value = '';
+                this.autoResize(input);
+                this.showTyping();
+
+                try {
+                    const response = await this.getAIResponse(message);
+                    this.hideTyping();
+
+                    if (response.success) {
+                        this.addMessage('ai', response.message, this.currentModel.name);
+                    } else {
+                        this.addMessage('ai', `❌ Ошибка: ${response.error}`, "ARSU AI");
+                    }
+                } catch (error) {
+                    this.hideTyping();
+                    console.error('Error:', error);
+                    this.addMessage('ai', "⚠️ Ошибка сети. Проверьте подключение.", "ARSU AI");
+                }
+            }
+
+            async getAIResponse(userMessage) {
+                const model = this.currentModel;
+
+                const requestData = {
+                    model: API_CONFIG.ACTUAL_MODEL, // Всегда используем Mistral
+                    messages: [
+                        {
+                            role: "system",
+                            content: `Ты - ${model.name}, специализированная модель ARSU AI.\n\n` +
+                                    model.hiddenPrompt +
+                                    `\n\nТекущее время: ${new Date().toLocaleString('ru-RU')}` +
+                                    `\nВаша задача: Отвечать ТОЛЬКО в рамках своей специализации.` +
+                                    `\nЕсли вопрос не по вашей специализации - вежливо откажитесь и предложите свою помощь.` +
+                                    `\nВсегда упоминай что ты часть ARSU AI системы.`
+                        },
+                        {
+                            role: "user",
+                            content: userMessage
+                        }
+                    ],
+                    max_tokens: 1500,
+                    temperature: 0.7
+                };
+
+                try {
+                    const response = await fetch(`${API_CONFIG.BASE_URL}/chat/completions`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${API_CONFIG.API_KEY}`,
+                            'HTTP-Referer': 'https://arsu-ai.com',
+                            'X-Title': 'ARSU AI Manager'
+                        },
+                        body: JSON.stringify(requestData)
+                    });
+
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        console.error("API Error:", errorText);
+                        return {
+                            success: false,
+                            error: "Временная ошибка API"
+                        };
+                    }
+
+                    const data = await response.json();
+
+                    if (data.choices && data.choices.length > 0) {
+                        return {
+                            success: true,
+                            message: data.choices[0].message.content
+                        };
+                    } else {
+                        return {
+                            success: false,
+                            error: "Нет ответа"
+                        };
+                    }
+                } catch (error) {
+                    console.error("Network Error:", error);
+                    return {
+                        success: false,
+                        error: error.message
+                    };
+                }
+            }
+
+            addMessage(sender, text, model = null, isWelcome = false) {
+                const container = document.getElementById('messagesContainer');
+
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}`;
+
+                const time = this.getCurrentTime();
+
+                messageDiv.innerHTML = `
+                    <div class="avatar ${sender}">
+                        <i class="fas fa-${sender === 'user' ? 'user' : 'robot'}"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text">${this.escapeHtml(text)}</div>
+                        <div class="message-meta">
+                            <span class="model-tag">${model || 'ARSU AI'}</span>
+                            <span class="message-time">${time}</span>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(messageDiv);
+                this.scrollToBottom();
+
+                this.chatHistory.push({
+                    sender,
+                    text,
+                    model,
+                    time
+                });
+            }
+
+            showTyping() {
+                const indicator = document.getElementById('typingIndicator');
+                indicator.classList.add('active');
+                this.scrollToBottom();
+            }
+
+            hideTyping() {
+                const indicator = document.getElementById('typingIndicator');
+                indicator.classList.remove('active');
+            }
+
+            showNotification(message, type = "info") {
+                const icon = type === "success" ? "fa-check-circle" :
+                           type === "warning" ? "fa-exclamation-triangle" :
+                           "fa-info-circle";
+
+                const notification = document.createElement('div');
+                notification.className = 'notification';
+                notification.innerHTML = `
+                    <i class="fas ${icon} notification-icon"></i>
+                    <div class="notification-text">${message}</div>
+                `;
+
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.style.animation = 'slideInRight 0.3s ease reverse';
+                    setTimeout(() => notification.remove(), 300);
+                }, 5000);
+            }
+
+            initEventListeners() {
+                const form = document.getElementById('chatForm');
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.sendMessage();
+                });
+
+                const input = document.getElementById('messageInput');
+                input.addEventListener('input', () => this.autoResize(input));
+
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.sendMessage();
+                    }
+                });
+
+                input.focus();
+            }
+
+            autoResize(textarea) {
+                textarea.style.height = 'auto';
+                textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
+            }
+
+            scrollToBottom() {
+                const container = document.getElementById('messagesContainer');
+                container.scrollTop = container.scrollHeight;
+            }
+
+            getCurrentTime() {
+                return new Date().toLocaleTimeString('ru-RU', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            window.arsuAI = new ArsuAIManager();
+            console.log('🚀 ARSU AI Manager запущен');
+            console.log('📊 Все модели работают через Mistral с разными промптами');
+            console.log('🎯 Пользователь видит разные специализированные модели');
+        });
+    </script>
+</body>
+</html>

@@ -54,8 +54,6 @@ builder.Services.AddAuthorization();
 
 // Hugging Face API
 var apiKey = configuration["HuggingFace:ApiKey"];
-if (string.IsNullOrWhiteSpace(apiKey))
-    throw new InvalidOperationException("HuggingFace:ApiKey is missing in appsettings.json!");
 
 builder.Services.AddHttpClient<IBotService, BotService>(client =>
 {
